@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "mysql": "^2.18.1",
+    "mysql2": "^3.11.4"
+  },
+  "name": "scalabledatatask",
+  "version": "1.0.0",
+  "description": "## MySQL",
+  "main": "mySqlDB.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "startSQL": "brew services start mysql \n sleep 2 \n node mySqlDB.js \n brew services stop mysql"
+  }
+}
