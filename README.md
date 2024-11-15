@@ -17,6 +17,8 @@ Used to get started: <https://www.tutorialspoint.com/nodejs/nodejs-mysql-get-sta
 
 ## MongoDB
 
+1. Start mongod db: ``brew services start mongodb-community@8.0``
+
 - logged into mongoDB with google
 - Used to get started: <https://www.freecodecamp.org/news/how-to-build-an-event-app-with-node-js/>
 - javascript & mongoDB: <https://www.mongodb.com/docs/drivers/node/current/>
