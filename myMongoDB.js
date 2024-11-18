@@ -1,5 +1,7 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const { Collection } = require('mongoose');
+var Benchmark = require('benchmark');
+const suite = new Benchmark.Suite("Insert test");
 const uri = "mongodb://localhost:27017/";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -124,7 +126,7 @@ run().catch(console.dir);
 //setup benchmarks 
 
 // TODO: vary the intervals where new data will be written 
-// [1s, 5s, 10s, 30s, 60s, 90s]
+
 
 // TODO: refresh the view by reading the latest value (morst recent timestamp) every 
 // [1s, 5s, 10s, 30s, 60s, 90s]
