@@ -1,4 +1,5 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { Collection } = require('mongoose');
 const uri = "mongodb://localhost:27017/";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -30,6 +31,71 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function randomTimestamp() {
+    return new Date(new Date() - Math.random() * (1e+12))
+}
+
+// TODO: add 1 million data to the database 
+function populateDatabaseLights(amount, db) {
+    const elements = new Array();
+
+    for (let i = 0; i < amount; i++) {
+        const timeStamp = randomTimestamp();
+        const r = getRandomInt(255);
+        const g = getRandomInt(255);
+        const b = getRandomInt(255);
+        const lamp = getRandomInt(100);
+        const DeviceNameLamp = "Lamp " + lamp.toString();
+        const LightPercent = getRandomInt(100);
+        const color = "rgb( " + r + ", " + g + ", " + b + ")";
+        const DocLamp = makeDocLamp(DeviceNameLamp, timeStamp, LightPercent, color);
+        elements.push(DocLamp);
+    }
+    db.insertMany(elements);
+
+}
+
+function populateDatabaseSensor(amount, db) {
+    const elements = new Array();
+
+    for (let i = 0; i < amount; i++) {
+        const timeStamp = randomTimestamp();
+        const lamp = getRandomInt(100);
+        const DeviceNameSensor = "Sensor " + lamp.toString();
+        const Temperature = getRandomInt(150);
+        const Humidity = getRandomInt(100);
+        const DocSensor = makeDocSensor(DeviceNameSensor, timeStamp, Temperature, Humidity);
+        elements.push(DocSensor);
+    }
+    db.insertMany(elements);
+
+}
+
+function randomBoolean() {
+    const number = getRandomInt(2);
+    if (number == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function populateDatabaseElectricity(amount, db) {
+    const elements = new Array();
+
+    for (let i = 0; i < amount; i++) {
+        const timeStamp = randomTimestamp();
+        const plugg = getRandomInt(100);
+        const DeviceNameSensor = "Plugg " + plugg.toString();
+        const On = randomBoolean();
+        const Watt = getRandomInt(1000);
+        const DocPlugg = makeDocPlugg(DeviceNameSensor, timeStamp, On, Watt);
+        elements.push(DocPlugg);
+    }
+    db.insertMany(elements);
+
+}
+
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
@@ -41,32 +107,10 @@ async function run() {
         const sensors = DB.collection("sensors");
         const elictricity = DB.collection("Wall Pluggs");
 
-        const DeviceNameSensor = "Sensor Slaapkamer";
-        const timeStamp1 = new Date();
-        //const ISODate = new Date('2014-01-22T14:56:59.301Z');
-        const Temperature = getRandomInt(150);
-        const Humidity = getRandomInt(100);
-        const DocSensor = makeDocSensor(DeviceNameSensor, timeStamp1, Temperature, Humidity);
+        //populateDatabaseLights(1000, lampen);
+        //populateDatabaseElectricity(1000, elictricity);
+        //populateDatabaseSensor(1000, sensors);
 
-        sleep(5000); //wait 5 seconds 
-
-        const timeStamp2 = new Date();
-        const DeviceNameLamp = "Lamp Living"
-        const LightPercent = getRandomInt(100);
-        const color = "Blue";
-        const DocLamp = makeDocLamp(DeviceNameLamp, timeStamp2, LightPercent, color);
-
-        sleep(5000); //wait 5 seconds 
-
-        const timeStamp3 = new Date();
-        const DeviceName = "PC";
-        const On = true;
-        const Watt = getRandomInt(1000);
-        const DocPlugg = makeDocPlugg(DeviceName, timeStamp3, On, Watt);
-
-        sensors.insertOne(DocSensor);
-        lampen.insertOne(DocLamp);
-        elictricity.insertOne(DocPlugg);
 
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -76,3 +120,13 @@ async function run() {
     }
 }
 run().catch(console.dir);
+
+//setup benchmarks 
+
+// TODO: vary the intervals where new data will be written 
+// [1s, 5s, 10s, 30s, 60s, 90s]
+
+// TODO: refresh the view by reading the latest value (morst recent timestamp) every 
+// [1s, 5s, 10s, 30s, 60s, 90s]
+
+// TODO: find some database queries that are more difficult to execute 
