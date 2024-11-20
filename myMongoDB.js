@@ -125,7 +125,8 @@ run().catch(console.dir);
 
 //setup benchmarks 
 
-// TODO: vary the intervals where new data will be written 
+// TODO: vary the intervals where new data will be written
+
 
 
 // TODO: refresh the view by reading the latest value (morst recent timestamp) every 
