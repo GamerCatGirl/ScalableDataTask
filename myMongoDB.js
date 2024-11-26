@@ -3,6 +3,7 @@ const { Collection } = require('mongoose');
 var Benchmark = require('benchmark');
 const suite = new Benchmark.Suite("Insert test");
 const uri = "mongodb://localhost:27017/";
+const fs = require('fs');
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -123,36 +124,42 @@ function addhours(hours) {
 
 async function insertInto(elm, db) {
     await db.insertOne(elm)
+    console.log(elm);
+}
+
+async function loop(dbLamp, dbSensor, dbElec, startTime, currentTime, stopTime) {
+    if (currentTime < stopTime) {
+        //1. add data 
+        const docLamp = makeLightElm(currentTime);
+        await insertInto(docLamp, dbLamp);
+        const docSensor = makeSensorElm(currentTime);
+        await insertInto(docSensor, dbSensor);
+        const docElec = makeElecElm(currentTime);
+        await insertInto(docElec, dbElec);
+        //2. sleep 5seconds 
+        console.log("start sleeping...")
+        setTimeout(() => {
+            //3set currentTime
+            console.log("sleep done");
+            newTime = new Date();
+            loop(dbLamp, dbSensor, dbElec, startTime, newTime, stopTime);
+            return "done"
+        }, 5000);
+    } else {
+        await client.close();
+        console.log(startTime);
+        console.log(stopTime);
+    }
 }
 
 async function populateDatabases(dbLamp, dbSensor, dbElec) {
     const startTime = new Date();
     const stopTime = addhours(24);
 
-    let added = false;
     let currentTime = startTime;
 
-    while (currentTime < stopTime) {
-        if (!added) {
-            //1. add data 
-            const docLamp = makeLightElm(currentTime);
-            insertInto(docLamp, dbLamp);
-            const docSensor = makeSensorElm(currentTime);
-            insertInto(docSensor, dbSensor);
-            const docElec = makeElecElm(currentTime);
-            insertInto(docElec, dbElec);
-            added = true;
-            //2. sleep 5seconds 
-            console.log("start sleeping...")
-            setTimeout(function () {
-                //3set currentTime
-                console.log("sleep done");
-                currentTime = new Date();
-                added = false;
-            }, 5);
-        }
-
-    }
+    const done = await loop(dbLamp, dbSensor, dbElec, startTime, currentTime, stopTime)
+    return done;
 }
 
 async function run() {
@@ -168,18 +175,32 @@ async function run() {
         const sensors = await DB.collection("sensors");
         const elictricity = await DB.collection("Wall Pluggs");
 
+        sleep(200);
+
         //populateDatabaseLights(1000, lampen);
         //populateDatabaseElectricity(1000, elictricity);
         //populateDatabaseSensor(1000, sensors);
+        const startTime = new Date();
+        const stopTime = addhours(24);
 
         await populateDatabases(lampen, sensors, elictricity);
+        //console.log(done);
 
 
     } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
+        const data = startTime.toString() + "\n" + stopTime.toString();
+        fs.writeFile('dateMongoDB.txt', data, (err) => {
+            if (err) throw err;
+        })
+
     }
 }
+/*finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+}
+    */
+
 run().catch(console.dir);
 
 // TODO: let code run 24 hours to populate database 
@@ -187,19 +208,20 @@ run().catch(console.dir);
 // use that data for the benchmarks 
 
 //setup benchmarks 
+/*
 suite
     .add("write data to database", function () {
-        //TODO: write data to database 
+        //TODO: write data to database
     })
     .add("fetch all data of same id", function () {
-        //TODO: fetch data 
+        //TODO: fetch data
     })
     .add("get latest data (last 1h)", function () {
-        //TODO: fetch latest data 
+        //TODO: fetch latest data
     })
     .on('complete', function () {
-        //TODO: print the results 
+        //TODO: print the results
     })
-
+*/
 
 // TODO: find some database queries that are more difficult to execute 
