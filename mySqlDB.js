@@ -149,24 +149,61 @@ function makeElecElm(timeStamp) {
     return DocPlugg;
 }
 
+function addSeconds(timeStamp) {
+    console.log(timeStamp);
+    let [date, time] = timeStamp.split(" ");
+    let [hour, minute, seconds] = time.split(":");
+    let newSeconds = Number.parseInt(seconds) + 5;
+    let newMinute = Number.parseInt(minute);
+    let newHour = Number.parseInt(hour);
+    if (newSeconds > 59) {
+        newSeconds -= 60;
+        newMinute += 1
+    }
+    if (newMinute > 59) {
+        newMinute -= 60;
+        newHour += 1
+    }
+
+    if (newHour < 10) {
+        newHour = "0" + newHour.toString();
+    }
+    if (newMinute < 10) {
+        newMinute = "0" + newMinute.toString();
+    }
+    if (newSeconds < 10) {
+        newSeconds = "0" + newSeconds.toString();
+    }
+
+    return date + " " + newHour + ":" + newMinute + ":" + newSeconds;
+}
+
 async function loop(startTime, currentTime, stopTime) {
     if (currentTime < stopTime) {
         //1. add data 
+
         const docLamp = makeLightElm(currentTime);
         await insert(docLamp);
         const docSensor = makeSensorElm(currentTime);
         await insert(docSensor);
         const docElec = makeElecElm(currentTime);
         await insert(docElec);
+
         //2. sleep 5seconds 
-        console.log("start sleeping...")
-        setTimeout(() => {
-            //3set currentTime
-            console.log("sleep done");
-            newTime = new Date().toISOString().slice(0, 19).replace('T', ' ');;
-            loop(startTime, newTime, stopTime);
-            return "done"
-        }, 5000);
+        ///*setTimeout(() => {
+        //3set currentTime
+        //const currentTimeIso = currentTime.replace(' ', 'T');
+        //console.log("currentTime: " + currentTime);
+        let newTime = addSeconds(currentTime);
+        //let time = new Date(t + 5000);
+        //let time = new Date(t.getTime + 5000); //add 5000 ms 
+        //console.log("new time: " + newTime);
+
+        //newTime = t.toISOString().slice(0, 19).replace('T', ' ');
+        //console.log(newTime);
+        loop(startTime, newTime, stopTime);
+        //return "done"
+        //}, 5000);
     } else {
         con.end();
         console.log(startTime);
@@ -182,8 +219,9 @@ function addhours(hours) {
 }
 
 async function populateDatabases() {
-    const startTime = new Date().toISOString().slice(0, 19).replace('T', ' ');;
-    const stopTime = addhours(24);
+    //const startTime = new Date().toISOString().slice(0, 19).replace('T', ' ');;
+    const startTime = "2024-11-30 08:14:02"
+    const stopTime = "2024-11-30 13:16:39"
 
     let currentTime = startTime;
 
@@ -218,7 +256,7 @@ con.connect(function (err) {
     //populateDatabaseElectricity(1)
     //populateDatabaseSensor(1)
 
-    populateDatabases();
+    //populateDatabases();
     /*
     con.query("SELECT * FROM lamps", function (err, result, fields) {
         if (err) throw err;

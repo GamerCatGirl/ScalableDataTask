@@ -4,6 +4,12 @@ var Benchmark = require('benchmark');
 const suite = new Benchmark.Suite("Insert test");
 const uri = "mongodb://localhost:27017/";
 const fs = require('fs');
+let DB = null;
+
+//let DB = null; //client.db("TimeSeries");
+//let lampen = null; //await DB.collection("lamps");
+let sensors = null; //await DB.collection("sensors");
+let elictricity = null; //await DB.collection("Wall Pluggs");
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -53,13 +59,14 @@ function makeLightElm(timeStamp) {
 
 function populateDatabaseLights(amount, db) {
     const elements = new Array();
-
-    for (let i = 0; i < amount; i++) {
-        const timeStamp = randomTimestamp();
-        const DocLamp = makeLightElm(timeStamp);
-        elements.push(DocLamp);
+    if (amount > 0) {
+        for (let i = 0; i < amount; i++) {
+            const timeStamp = randomTimestamp();
+            const DocLamp = makeLightElm(timeStamp);
+            elements.push(DocLamp);
+        }
+        db.insertMany(elements);
     }
-    db.insertMany(elements);
 
 }
 
@@ -75,12 +82,14 @@ function makeSensorElm(timeStamp) {
 function populateDatabaseSensor(amount, db) {
     const elements = new Array();
 
-    for (let i = 0; i < amount; i++) {
-        const timeStamp = randomTimestamp();
-        const DocSensor = makeSensorElm(timeStamp);
-        elements.push(DocSensor);
+    if (amount > 0) {
+        for (let i = 0; i < amount; i++) {
+            const timeStamp = randomTimestamp();
+            const DocSensor = makeSensorElm(timeStamp);
+            elements.push(DocSensor);
+        }
+        db.insertMany(elements);
     }
-    db.insertMany(elements);
 
 }
 
@@ -105,12 +114,15 @@ function makeElecElm(timeStamp) {
 function populateDatabaseElectricity(amount, db) {
     const elements = new Array();
 
-    for (let i = 0; i < amount; i++) {
-        const timeStamp = randomTimestamp();
-        const DocPlugg = makeElecElm(timeStamp);
-        elements.push(DocPlugg);
+    if (amount > 0) {
+
+        for (let i = 0; i < amount; i++) {
+            const timeStamp = randomTimestamp();
+            const DocPlugg = makeElecElm(timeStamp);
+            elements.push(DocPlugg);
+        }
+        db.insertMany(elements);
     }
-    db.insertMany(elements);
 
 }
 
@@ -141,6 +153,8 @@ async function loop(dbLamp, dbSensor, dbElec, startTime, currentTime, stopTime) 
         setTimeout(() => {
             //3set currentTime
             console.log("sleep done");
+            const time = currentTime - startTime;
+            console.log("time running: " + time);
             newTime = new Date();
             loop(dbLamp, dbSensor, dbElec, startTime, newTime, stopTime);
             return "done"
@@ -177,13 +191,15 @@ async function run() {
 
         sleep(200);
 
+        //lampen.find()
+
         //populateDatabaseLights(1000, lampen);
         //populateDatabaseElectricity(1000, elictricity);
         //populateDatabaseSensor(1000, sensors);
         const startTime = new Date();
         const stopTime = addhours(24);
 
-        await populateDatabases(lampen, sensors, elictricity);
+        //await populateDatabases(lampen, sensors, elictricity);
         //console.log(done);
 
 
@@ -201,13 +217,95 @@ async function run() {
 }
     */
 
-run().catch(console.dir);
+//run().catch(console.dir);
+async function fetchDataLampName(lampen) {
+    const lamp = getRandomInt(100);
+    const DeviceNameLamp = "Lamp " + lamp.toString();
+    const results = await lampen.find({ deviceName: DeviceNameLamp }).toArray();
+    return results;
+}
 
-// TODO: let code run 24 hours to populate database 
 // TODO: populate database to fit x amount data 
 // use that data for the benchmarks 
 
+suite.on('start', async function () {
+    await client.connect();
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    sleep(2);
+    DB = await client.db("TimeSeries");
+    lampen = await DB.collection("lamps");
+    sensors = await DB.collection("sensors");
+    elictricity = await DB.collection("Wall Pluggs");
+    fillTo(20000);
+})
+
+//fill till 20000 records
+async function fillTo(amount) {
+    const lampen = await DB.collection("lamps");
+    const sensors = await DB.collection("sensors");
+    const elictricity = await DB.collection("Wall Pluggs");
+
+    const countLampen = await lampen.countDocuments();
+    const countSensors = await sensors.countDocuments();
+    const countElec = await elictricity.countDocuments();
+
+    const toFillLampen = amount - countLampen;
+    const toFillSensors = amount - countSensors;
+    const toFillElec = amount - countElec;
+
+    console.log(toFillLampen);
+
+    await populateDatabaseElectricity(toFillElec, elictricity);
+    await populateDatabaseLights(toFillLampen, lampen);
+    await populateDatabaseSensor(toFillSensors, sensors);
+
+}
+
 //setup benchmarks 
+suite
+    //fill database to 20000 records first 
+    .add("fetch all lights of same id (20000 records)", {
+        defer: true, //allows async operations
+        minSamples: 30,
+        maxTime: 10,
+        fn: async function (deferred) {
+            try {
+                const lampen = await DB.collection("lamps");
+                if (lampen != null) {
+                    const results = await fetchDataLampName(lampen);
+                    //console.log(`Fetched ${results.length} records.`);
+                    deferred.resolve();
+                } else {
+                    console.error("Error during fetch: the light are not inisiated!");
+                    deferred.resolve();
+                }
+
+            } catch (error) {
+                console.error('Error during fetch:', error);
+                deferred.resolve(); // Ensure deferred completion even on error
+            }
+        }
+        //TODO: fetch data
+    })
+    // Log benchmark results
+    .on('cycle', function (event) {
+        console.log(String(event.target)); // Logs details of each benchmark
+    })
+    .on('complete', function () {
+        console.log('All benchmarks completed.');
+
+        this.forEach(benchmark => {
+            //TODO: write to csv 
+            console.log(`Benchmark: ${benchmark.name}`);
+            console.log(`- Mean time: ${benchmark.stats.mean * 1000} ms`);
+            console.log(`- Runs: ${benchmark.stats.sample.length}`);
+            console.log(`- Total time: ${(benchmark.stats.sample.length * benchmark.stats.mean * 1000).toFixed(2)} ms`);
+        });
+
+        client.close().then(() => console.log('Database disconnected.'));
+    })
+    .run({ async: true });
 /*
 suite
     .add("write data to database", function () {
