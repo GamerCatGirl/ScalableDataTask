@@ -44,6 +44,14 @@ function randomTimestamp() {
     return new Date(new Date() - Math.random() * (1e+12))
 }
 
+function makeRGB() {
+    const r = getRandomInt(255);
+    const g = getRandomInt(255);
+    const b = getRandomInt(255);
+    const color = "rgb( " + r + ", " + g + ", " + b + ")";
+    return color;
+}
+
 function makeLightElm(timeStamp) {
     const r = getRandomInt(255);
     const g = getRandomInt(255);
@@ -399,9 +407,7 @@ suite
         }
     })
 
-    // TODO: compare database sorted vs unsorted previous 
-
-    //TODO: fetch all data for the last minute 
+    // fetch all data for the last minute 
     .add("fetch all last minute -- lamp (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -436,7 +442,7 @@ suite
         }
     })
 
-    //TODO: fetch all data for the last 10 minute 
+    //fetch all data for the last 10 minute 
     .add("fetch all last 10 minutes -- lamp (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -586,7 +592,7 @@ suite
         }
     })
 
-    //TODO: fetch all data for the last 24 hour 
+    // fetch all data for the last 24 hour 
     .add("fetch all last 24 hours -- lamp (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -719,7 +725,416 @@ suite
         }
     })
 
+    // TODO: compare database sorted vs unsorted previous
+
     //TODO: update 
+    //update 1 value in a row 
+    .add("update 1 value in a row - lampen (20000 records)", {
+        defer: true, //allows async operations
+        minSamples: 30,
+        fn: async function (deferred) {
+            const lampen = await DB.collection("lamps");
+            // Query to find the document
+            const lamp = getRandomInt(100);
+            const DeviceNameLamp = "Lamp " + lamp.toString();
+            const query = {
+                deviceName: DeviceNameLamp,
+            };
+            // update lightpercent 
+            const updateValue = getRandomInt(100);
+            const update = {
+                $set: { lightPercent: updateValue } // Replace 'updatedField' with your field name
+            };
+
+            // Perform the update
+            await lampen.updateOne(query, update);
+
+            deferred.resolve();
+        }
+    })
+
+    //update 2 values in a row 
+    .add("update 2 values in a row - lampen (20000 records)", {
+        defer: true, //allows async operations
+        minSamples: 30,
+        fn: async function (deferred) {
+            const lampen = await DB.collection("lamps");
+            // Query to find the document
+            const lamp = getRandomInt(100);
+            const DeviceNameLamp = "Lamp " + lamp.toString();
+            const query = {
+                deviceName: DeviceNameLamp,
+            };
+            // update lightpercent 
+            const updateValue = getRandomInt(100);
+            const colorUpdate = makeRGB();
+            const update = {
+                $set: {
+                    lightPercent: updateValue,
+                    color: colorUpdate
+                } // Replace 'updatedField' with your field name
+            };
+
+            // Perform the update
+            await lampen.updateOne(query, update);
+
+            deferred.resolve();
+        }
+    })
+
+    //update 3 values in a row 
+    .add("update 3 values in a row - lampen (20000 records)", {
+        defer: true, //allows async operations
+        minSamples: 30,
+        fn: async function (deferred) {
+            const lampen = await DB.collection("lamps");
+            // Query to find the document
+            const lamp = getRandomInt(100);
+            const DeviceNameLamp = "Lamp " + lamp.toString();
+            const query = {
+                deviceName: DeviceNameLamp,
+            };
+            // update lightpercent 
+            const updateValue = getRandomInt(100);
+            const newId = getRandomInt(100);
+            const colorUpdate = makeRGB();
+            const newName = "Lamp " + newId.toString();
+            const update = {
+                $set: {
+                    lightPercent: updateValue,
+                    color: colorUpdate,
+                    deviceName: newName
+                } // Replace 'updatedField' with your field name
+            };
+
+            // Perform the update
+            await lampen.updateOne(query, update);
+
+            deferred.resolve();
+        }
+    })
+
+    //update multiple colums 
+    // update 2 colums 
+    .add("update 1 column - lampen (20000 records)", {
+        defer: true, //allows async operations
+        minSamples: 30,
+        fn: async function (deferred) {
+            const lampen = await DB.collection("lamps");
+            // Query to find the document
+            const lamp = getRandomInt(100);
+            const DeviceNameLamp = "Lamp " + lamp.toString();
+            const query = {
+                deviceName: DeviceNameLamp,
+            };
+            // update lightpercent 
+            const updateValue = getRandomInt(100);
+            const update = {
+                $set: { lightPercent: updateValue } // Replace 'updatedField' with your field name
+            };
+
+            // Perform the update
+            await lampen.updateOne(query, update);
+
+            deferred.resolve();
+        }
+    })
+
+    .add("update 2 columns - lampen (20000 records)", {
+        defer: true, //allows async operations
+        minSamples: 30,
+        fn: async function (deferred) {
+            const lampen = await DB.collection("lamps");
+            // Query to find the document
+            const lamp = getRandomInt(100);
+            const DeviceNameLamp = "Lamp " + lamp.toString();
+            const lamp2 = getRandomInt(100);
+            const DeviceNameLamp2 = "Lamp " + lamp2.toString();
+
+            const query = {
+                deviceName: DeviceNameLamp,
+            };
+            const query2 = {
+                deviceName: DeviceNameLamp2
+            }
+            // update lightpercent 
+            const updateValue = getRandomInt(100);
+            const update = {
+                $set: { lightPercent: updateValue } // Replace 'updatedField' with your field name
+            };
+
+            // Perform the update
+            await lampen.updateOne(query, update);
+            await lampen.updateOne(query2, update);
+
+            deferred.resolve();
+        }
+    })
+    .add("update 5 columns - lampen (20000 records)", {
+        defer: true, //allows async operations
+        minSamples: 30,
+        fn: async function (deferred) {
+            const lampen = await DB.collection("lamps");
+            // Query to find the document
+            const lamp = getRandomInt(100);
+            const DeviceNameLamp = "Lamp " + lamp.toString();
+            const lamp2 = getRandomInt(100);
+            const DeviceNameLamp2 = "Lamp " + lamp2.toString();
+            const lamp3 = getRandomInt(100);
+            const DeviceNameLamp3 = "Lamp " + lamp3.toString();
+            const lamp4 = getRandomInt(100);
+            const DeviceNameLamp4 = "Lamp " + lamp4.toString();
+            const lamp5 = getRandomInt(100);
+            const DeviceNameLamp5 = "Lamp " + lamp5.toString();
+
+            const query = {
+                deviceName: DeviceNameLamp,
+            };
+            const query2 = {
+                deviceName: DeviceNameLamp2
+            }
+            const query3 = {
+                deviceName: DeviceNameLamp3
+            }
+            const query4 = {
+                deviceName: DeviceNameLamp4
+            }
+            const query5 = {
+                deviceName: DeviceNameLamp5
+            }
+            // update lightpercent 
+            const updateValue = getRandomInt(100);
+            const update = {
+                $set: { lightPercent: updateValue } // Replace 'updatedField' with your field name
+            };
+
+            // Perform the update
+            await lampen.updateOne(query, update);
+            await lampen.updateOne(query2, update);
+            await lampen.updateOne(query3, update);
+            await lampen.updateOne(query4, update);
+            await lampen.updateOne(query5, update);
+
+            deferred.resolve();
+        }
+    })
+
+    .add("update 10 columns - lampen (20000 records)", {
+        defer: true, //allows async operations
+        minSamples: 30,
+        fn: async function (deferred) {
+            const lampen = await DB.collection("lamps");
+            // Query to find the document
+            const lamp = getRandomInt(100);
+            const DeviceNameLamp = "Lamp " + lamp.toString();
+            const lamp2 = getRandomInt(100);
+            const DeviceNameLamp2 = "Lamp " + lamp2.toString();
+            const lamp3 = getRandomInt(100);
+            const DeviceNameLamp3 = "Lamp " + lamp3.toString();
+            const lamp4 = getRandomInt(100);
+            const DeviceNameLamp4 = "Lamp " + lamp4.toString();
+            const lamp5 = getRandomInt(100);
+            const DeviceNameLamp5 = "Lamp " + lamp5.toString();
+            const lamp6 = getRandomInt(100);
+            const DeviceNameLamp6 = "Lamp " + lamp6.toString();
+            const lamp7 = getRandomInt(100);
+            const DeviceNameLamp7 = "Lamp " + lamp7.toString();
+            const lamp8 = getRandomInt(100);
+            const DeviceNameLamp8 = "Lamp " + lamp8.toString();
+            const lamp9 = getRandomInt(100);
+            const DeviceNameLamp9 = "Lamp " + lamp9.toString();
+            const lamp10 = getRandomInt(100);
+            const DeviceNameLamp10 = "Lamp " + lamp10.toString();
+
+            const query = {
+                deviceName: DeviceNameLamp,
+            };
+            const query2 = {
+                deviceName: DeviceNameLamp2
+            }
+            const query3 = {
+                deviceName: DeviceNameLamp3
+            }
+            const query4 = {
+                deviceName: DeviceNameLamp4
+            }
+            const query5 = {
+                deviceName: DeviceNameLamp5
+            }
+            const query6 = {
+                deviceName: DeviceNameLamp6,
+            };
+            const query7 = {
+                deviceName: DeviceNameLamp7
+            }
+            const query8 = {
+                deviceName: DeviceNameLamp8
+            }
+            const query9 = {
+                deviceName: DeviceNameLamp9
+            }
+            const query10 = {
+                deviceName: DeviceNameLamp10
+            }
+            // update lightpercent 
+            const updateValue = getRandomInt(100);
+            const update = {
+                $set: { lightPercent: updateValue } // Replace 'updatedField' with your field name
+            };
+
+            // Perform the update
+            await lampen.updateOne(query, update);
+            await lampen.updateOne(query2, update);
+            await lampen.updateOne(query3, update);
+            await lampen.updateOne(query4, update);
+            await lampen.updateOne(query5, update);
+            await lampen.updateOne(query6, update);
+            await lampen.updateOne(query7, update);
+            await lampen.updateOne(query8, update);
+            await lampen.updateOne(query9, update);
+            await lampen.updateOne(query10, update);
+
+            deferred.resolve();
+        }
+    })
+    .add("update 20 columns - lampen (20000 records)", {
+        defer: true, //allows async operations
+        minSamples: 30,
+        fn: async function (deferred) {
+            const lampen = await DB.collection("lamps");
+            // Query to find the document
+            const lamp = getRandomInt(100);
+            const DeviceNameLamp = "Lamp " + lamp.toString();
+            const lamp2 = getRandomInt(100);
+            const DeviceNameLamp2 = "Lamp " + lamp2.toString();
+            const lamp3 = getRandomInt(100);
+            const DeviceNameLamp3 = "Lamp " + lamp3.toString();
+            const lamp4 = getRandomInt(100);
+            const DeviceNameLamp4 = "Lamp " + lamp4.toString();
+            const lamp5 = getRandomInt(100);
+            const DeviceNameLamp5 = "Lamp " + lamp5.toString();
+            const lamp6 = getRandomInt(100);
+            const DeviceNameLamp6 = "Lamp " + lamp6.toString();
+            const lamp7 = getRandomInt(100);
+            const DeviceNameLamp7 = "Lamp " + lamp7.toString();
+            const lamp8 = getRandomInt(100);
+            const DeviceNameLamp8 = "Lamp " + lamp8.toString();
+            const lamp9 = getRandomInt(100);
+            const DeviceNameLamp9 = "Lamp " + lamp9.toString();
+            const lamp10 = getRandomInt(100);
+            const DeviceNameLamp10 = "Lamp " + lamp10.toString();
+            const lamp11 = getRandomInt(100);
+            const DeviceNameLamp11 = "Lamp " + lamp11.toString();
+            const lamp12 = getRandomInt(100);
+            const DeviceNameLamp12 = "Lamp " + lamp12.toString();
+            const lamp13 = getRandomInt(100);
+            const DeviceNameLamp13 = "Lamp " + lamp13.toString();
+            const lamp14 = getRandomInt(100);
+            const DeviceNameLamp14 = "Lamp " + lamp14.toString();
+            const lamp15 = getRandomInt(100);
+            const DeviceNameLamp15 = "Lamp " + lamp15.toString();
+            const lamp16 = getRandomInt(100);
+            const DeviceNameLamp16 = "Lamp " + lamp16.toString();
+            const lamp17 = getRandomInt(100);
+            const DeviceNameLamp17 = "Lamp " + lamp17.toString();
+            const lamp18 = getRandomInt(100);
+            const DeviceNameLamp18 = "Lamp " + lamp18.toString();
+            const lamp19 = getRandomInt(100);
+            const DeviceNameLamp19 = "Lamp " + lamp19.toString();
+            const lamp20 = getRandomInt(100);
+            const DeviceNameLamp20 = "Lamp " + lamp20.toString();
+
+            const query = {
+                deviceName: DeviceNameLamp,
+            };
+            const query2 = {
+                deviceName: DeviceNameLamp2
+            }
+            const query3 = {
+                deviceName: DeviceNameLamp3
+            }
+            const query4 = {
+                deviceName: DeviceNameLamp4
+            }
+            const query5 = {
+                deviceName: DeviceNameLamp5
+            }
+            const query6 = {
+                deviceName: DeviceNameLamp6,
+            };
+            const query7 = {
+                deviceName: DeviceNameLamp7
+            }
+            const query8 = {
+                deviceName: DeviceNameLamp8
+            }
+            const query9 = {
+                deviceName: DeviceNameLamp9
+            }
+            const query10 = {
+                deviceName: DeviceNameLamp10
+            }
+            const query11 = {
+                deviceName: DeviceNameLamp11,
+            };
+            const query12 = {
+                deviceName: DeviceNameLamp12
+            }
+            const query13 = {
+                deviceName: DeviceNameLamp13
+            }
+            const query14 = {
+                deviceName: DeviceNameLamp14
+            }
+            const query15 = {
+                deviceName: DeviceNameLamp15
+            }
+            const query16 = {
+                deviceName: DeviceNameLamp16,
+            };
+            const query17 = {
+                deviceName: DeviceNameLamp17
+            }
+            const query18 = {
+                deviceName: DeviceNameLamp18
+            }
+            const query19 = {
+                deviceName: DeviceNameLamp19
+            }
+            const query20 = {
+                deviceName: DeviceNameLamp20
+            }
+            // update lightpercent 
+            const updateValue = getRandomInt(100);
+            const update = {
+                $set: { lightPercent: updateValue } // Replace 'updatedField' with your field name
+            };
+
+            // Perform the update
+            await lampen.updateOne(query, update);
+            await lampen.updateOne(query2, update);
+            await lampen.updateOne(query3, update);
+            await lampen.updateOne(query4, update);
+            await lampen.updateOne(query5, update);
+            await lampen.updateOne(query6, update);
+            await lampen.updateOne(query7, update);
+            await lampen.updateOne(query8, update);
+            await lampen.updateOne(query9, update);
+            await lampen.updateOne(query10, update);
+            await lampen.updateOne(query11, update);
+            await lampen.updateOne(query12, update);
+            await lampen.updateOne(query13, update);
+            await lampen.updateOne(query14, update);
+            await lampen.updateOne(query15, update);
+            await lampen.updateOne(query16, update);
+            await lampen.updateOne(query17, update);
+            await lampen.updateOne(query18, update);
+            await lampen.updateOne(query19, update);
+            await lampen.updateOne(query20, update);
+
+            deferred.resolve();
+        }
+    })
 
     //TODO: compare addAll/add one by one 
     .add("addAll/addOne write 1 (20000 records)", {
