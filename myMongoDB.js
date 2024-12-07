@@ -6,12 +6,13 @@ const uri = "mongodb://localhost:27017/";
 let printed = false;
 const fs = require('fs');
 let DB = null;
+let duringFile = "output_during_mongo.txt";
 
 //TO check what is added to delete short after the test 
 let amountAddedLampen = 0;
 let amountAddedElec = 0;
 let amountAddedSensor = 0;
-let toDelete = 103633;
+let toDelete = 0;
 let sizeCollection = 20000;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -365,7 +366,12 @@ suite
         lampen = await DB.collection("lamps");
         sensors = await DB.collection("sensors");
         elictricity = await DB.collection("Wall Pluggs");
+        let time = new Date();
+        fs.appendFile(duringFile, String(time), (err) => { if (err) throw err });
+        fs.appendFile(duringFile, "\n", (err) => { if (err) throw err });
     })
+
+    //TODO: add test to see how long it takes to fetch a single collection 
 
     .add("deleting and filling database to wanted amount", {
         defer: true,
@@ -1214,9 +1220,6 @@ suite
 
             await populateDatabaseLightsAddOne(1, lampen);
 
-            let amountInDB = await lampen.countDocuments();
-            console.log(amountInDB);
-
             deferred.resolve();
         }
     })
@@ -1969,17 +1972,41 @@ suite
     // Log benchmark results
     .on('cycle', async function (event) {
         console.log(String(event.target)); // Logs details of each benchmark
+        let time = new Date()
+        fs.appendFile(duringFile, String(time), (err) => { if (err) throw err });
+        fs.appendFile(duringFile, "\n", (err) => { if (err) throw err });
+        fs.appendFile(duringFile, String(event.target), (err) => { if (err) throw err });
+        fs.appendFile(duringFile, "\n", (err) => { if (err) throw err });
         // delete elements added 
     })
     .on('complete', function () {
         console.log('All benchmarks completed.');
+        let time = new Date()
+        fs.appendFile(duringFile, String(time), (err) => { if (err) throw err });
+
+        let file = "output_mongo.txt";
 
         this.forEach(benchmark => {
             //TODO: write to csv 
-            console.log(`Benchmark: ${benchmark.name}`);
-            console.log(`- Mean time: ${benchmark.stats.mean * 1000} ms`);
-            console.log(`- Runs: ${benchmark.stats.sample.length}`);
-            console.log(`- Total time: ${(benchmark.stats.sample.length * benchmark.stats.mean * 1000).toFixed(2)} ms`);
+            let benchmarkName = `Benchmark: ${benchmark.name}`
+            let meanTime = `- Mean time: ${benchmark.stats.mean * 1000} ms`
+            let runs = `- Runs: ${benchmark.stats.sample.length}`
+            let totalTime = `- Total time: ${(benchmark.stats.sample.length * benchmark.stats.mean * 1000).toFixed(2)} ms`;
+
+            fs.appendFile(file, benchmarkName, (err) => { if (err) throw err; });
+            fs.appendFile(file, "\n", (err) => { if (err) throw err });
+            fs.appendFile(file, meanTime, (err) => { if (err) throw err; });
+            fs.appendFile(file, "\n", (err) => { if (err) throw err });
+            fs.appendFile(file, runs, (err) => { if (err) throw err; });
+            fs.appendFile(file, "\n", (err) => { if (err) throw err });
+            fs.appendFile(file, totalTime, (err) => { if (err) throw err; });
+            fs.appendFile(file, "\n", (err) => { if (err) throw err });
+
+            //fs.write()
+            console.log(benchmarkName);
+            console.log(meanTime);
+            console.log(runs);
+            console.log(totalTime);
         });
 
         client.close().then(() => console.log('Database disconnected.'));
