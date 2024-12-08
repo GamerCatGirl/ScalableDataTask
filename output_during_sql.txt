@@ -591,3 +591,94 @@ Sat Dec 07 2024 16:46:37 GMT+0100 (Central European Standard Time)
 
 addOne write 10 x 609 ops/sec ±4.20% (10 runs sampled)
 Test deleted? x 2.76 ops/sec ±195.63% (81 runs sampled)Sat Dec 07 2024 16:47:12 GMT+0100 (Central European Standard Time)Sat Dec 07 2024 16:47:12 GMT+0100 (Central European Standard Time)
+Sat Dec 07 2024 21:50:38 GMT+0100 (Central European Standard Time)
+Sat Dec 07 2024 21:50:44 GMT+0100 (Central European Standard Time)
+deleting and filling database to wanted amount x 493 ops/sec ±2.19% (78 runs sampled)
+Sat Dec 07 2024 21:50:45 GMT+0100 (Central European Standard Time)addOne write 1 x 5,496 ops/sec ±5.12% (10 runs sampled)
+
+
+Test deleted? x 2.58 ops/sec ±195.64% (77 runs sampled)Sat Dec 07 2024 21:51:21 GMT+0100 (Central European Standard Time)
+Sat Dec 07 2024 21:51:21 GMT+0100 (Central European Standard Time)
+addOne write 10 x 568 ops/sec ±2.68% (10 runs sampled)
+Sat Dec 07 2024 21:51:55 GMT+0100 (Central European Standard Time)
+Test deleted? x 2.88 ops/sec ±195.60% (80 runs sampled)
+Sat Dec 07 2024 21:51:56 GMT+0100 (Central European Standard Time)addOne write 100 x 63.34 ops/sec ±3.88% (10 runs sampled)
+
+Sat Dec 07 2024 21:52:31 GMT+0100 (Central European Standard Time)
+
+Sat Dec 07 2024 21:52:31 GMT+0100 (Central European Standard Time)Test deleted? x 2.85 ops/sec ±195.63% (84 runs sampled)Sat Dec 07 2024 21:54:38 GMT+0100 (Central European Standard Time)
+Sat Dec 07 2024 21:54:44 GMT+0100 (Central European Standard Time)
+deleting and filling database to wanted amount x 472 ops/sec ±4.20% (76 runs sampled)
+Sat Dec 07 2024 21:54:45 GMT+0100 (Central European Standard Time)
+addOne write 1 x 5,446 ops/sec ±12.64% (10 runs sampled)
+
+Test deleted? x 2.05 ops/sec ±195.73% (78 runs sampled)
+Sat Dec 07 2024 21:55:29 GMT+0100 (Central European Standard Time)addOne write 10 x 600 ops/sec ±3.53% (10 runs sampled)Sat Dec 07 2024 21:55:30 GMT+0100 (Central European Standard Time)
+
+Sat Dec 07 2024 21:56:10 GMT+0100 (Central European Standard Time)Test deleted? x 2.30 ops/sec ±195.69% (79 runs sampled)
+
+addOne write 100 x 61.84 ops/sec ±5.33% (10 runs sampled)
+Sat Dec 07 2024 21:56:11 GMT+0100 (Central European Standard Time)
+Sat Dec 07 2024 21:56:48 GMT+0100 (Central European Standard Time)
+Test deleted? x 2.51 ops/sec ±195.66% (78 runs sampled)
+Sat Dec 07 2024 21:56:50 GMT+0100 (Central European Standard Time)
+addOne write 1K x 6.12 ops/sec ±6.98% (10 runs sampled)
+Sat Dec 07 2024 21:58:06 GMT+0100 (Central European Standard Time)
+Test deleted? x 1.15 ops/sec ±195.85% (81 runs sampled)Sat Dec 07 2024 21:58:06 GMT+0100 (Central European Standard Time)
+Sat Dec 07 2024 22:01:35 GMT+0100 (Central European Standard Time)
+Sat Dec 07 2024 22:01:41 GMT+0100 (Central European Standard Time)
+deleting and filling database to wanted amount x 479 ops/sec ±2.05% (76 runs sampled)
+Sat Dec 07 2024 22:01:42 GMT+0100 (Central European Standard Time)
+addAll write 1 x 114,802 ops/sec ±13.41% (10 runs sampled)
+Sat Dec 07 2024 22:07:00 GMT+0100 (Central European Standard Time)
+
+deleting and filling database to wanted amount x 0.58 ops/sec ±195.77% (77 runs sampled)Sat Dec 07 2024 22:09:18 GMT+0100 (Central European Standard Time)
+Sat Dec 07 2024 22:09:19 GMT+0100 (Central European Standard Time)
+addAll write 1 x 129,454 ops/sec ±8.64% (10 runs sampled)
+
+Sat Dec 07 2024 22:20:14 GMT+0100 (Central European Standard Time)Test deleted? x 0.12 ops/sec ±195.98% (78 runs sampled)
+Sat Dec 07 2024 22:20:14 GMT+0100 (Central European Standard Time)Sat Dec 07 2024 22:21:23 GMT+0100 (Central European Standard Time)
+Sat Dec 07 2024 22:22:11 GMT+0100 (Central European Standard Time)
+Sat Dec 07 2024 22:22:17 GMT+0100 (Central European Standard Time)
+
+deleting and filling database to wanted amount x 139 ops/sec ±137.52% (71 runs sampled)Sat Dec 07 2024 22:22:25 GMT+0100 (Central European Standard Time)
+delete 1 record lampen x 141 ops/sec ±0.63% (107 runs sampled)
+Sat Dec 07 2024 22:22:31 GMT+0100 (Central European Standard Time)
+
+Test added x 252 ops/sec ±96.92% (75 runs sampled)Sat Dec 07 2024 22:22:39 GMT+0100 (Central European Standard Time)
+
+delete 10 record lampen x 14.17 ops/sec ±0.53% (93 runs sampled)Sat Dec 07 2024 22:22:45 GMT+0100 (Central European Standard Time)
+Test added x 220 ops/sec ±104.71% (74 runs sampled)
+Sat Dec 07 2024 22:23:11 GMT+0100 (Central European Standard Time)
+delete 100 record lampen x 1.42 ops/sec ±0.69% (37 runs sampled)
+
+Sat Dec 07 2024 22:23:17 GMT+0100 (Central European Standard Time)Test added x 158 ops/sec ±134.36% (74 runs sampled)
+Sat Dec 07 2024 22:26:48 GMT+0100 (Central European Standard Time)
+delete 1K record lampen x 0.14 ops/sec ±0.42% (30 runs sampled)
+Sat Dec 07 2024 22:26:54 GMT+0100 (Central European Standard Time)Test added x 167 ops/sec ±131.22% (75 runs sampled)
+
+Sat Dec 07 2024 22:26:54 GMT+0100 (Central European Standard Time)Sat Dec 07 2024 22:27:31 GMT+0100 (Central European Standard Time)
+
+Sat Dec 07 2024 22:27:37 GMT+0100 (Central European Standard Time)deleting and filling database to wanted amount x 497 ops/sec ±2.08% (78 runs sampled)
+Sat Dec 07 2024 22:27:37 GMT+0100 (Central European Standard Time)
+addAll write 1 x 96,710 ops/sec ±0.00% (1 run sampled)
+Sat Dec 07 2024 22:29:23 GMT+0100 (Central European Standard Time)
+Test deleted? x 0.81 ops/sec ±195.90% (81 runs sampled)
+Sat Dec 07 2024 22:29:23 GMT+0100 (Central European Standard Time)Sat Dec 07 2024 22:29:44 GMT+0100 (Central European Standard Time)
+
+Sat Dec 07 2024 22:29:50 GMT+0100 (Central European Standard Time)deleting and filling database to wanted amount x 489 ops/sec ±1.96% (80 runs sampled)
+Sat Dec 07 2024 22:29:50 GMT+0100 (Central European Standard Time)
+addAll write 1 x 97,311 ops/sec ±0.00% (1 run sampled)
+Sat Dec 07 2024 22:31:57 GMT+0100 (Central European Standard Time)Test deleted? x 0.65 ops/sec ±195.91% (79 runs sampled)
+
+Sat Dec 07 2024 22:31:57 GMT+0100 (Central European Standard Time)addAll write 10 x 29,806 ops/sec ±0.00% (1 run sampled)
+
+Sat Dec 07 2024 22:36:33 GMT+0100 (Central European Standard Time)
+
+Sat Dec 07 2024 22:36:33 GMT+0100 (Central European Standard Time)Test deleted? x 0.29 ops/sec ±195.96% (79 runs sampled)Sat Dec 07 2024 22:37:43 GMT+0100 (Central European Standard Time)
+Sat Dec 07 2024 22:37:50 GMT+0100 (Central European Standard Time)
+
+deleting and filling database to wanted amount x 479 ops/sec ±2.48% (78 runs sampled)Sat Dec 07 2024 22:37:50 GMT+0100 (Central European Standard Time)addAll write 100 x 4,739 ops/sec ±0.00% (1 run sampled)
+
+Sat Dec 07 2024 22:41:27 GMT+0100 (Central European Standard Time)
+Test deleted? x 0.38 ops/sec ±195.95% (81 runs sampled)Sat Dec 07 2024 22:41:27 GMT+0100 (Central European Standard Time)

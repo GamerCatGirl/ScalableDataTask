@@ -6,7 +6,7 @@ var con = mysql.createConnection({
     port: '/tmp/mysql.sock',
     database: "time_series",
 });
-const sizeCollection = 20000;
+const sizeCollection = 5000000;
 const fs = require('fs'); //for file writing 
 const lampen = "lamps"
 const sensors = "sensors"
@@ -14,8 +14,8 @@ const elictricity = "wall_pluggs"
 const Benchmark = require('benchmark');
 const { timeStamp } = require('console');
 const suite = new Benchmark.Suite("Insert test");
-const duringFile = "output_during_sql.txt";
-const doneFile = "output_sql.txt";
+const duringFile = "output_during_5M_sql.txt"//"output_during_sql.txt";
+const doneFile = "output_5M_sql.txt";
 let toDelete = 0;
 let printed = false;
 let amountAddedLampen = 0;
@@ -25,11 +25,10 @@ let amountAddedSensor = 0;
 function randomTimestamp() {
     while (true) {
         const randomDate = new Date(new Date() - Math.random() * (1e+12)); // Generate random timestamp
-        const hours = randomDate.getHours();
         const dateTimeSQL = randomDate.toISOString().slice(0, 19).replace('T', ' ');
 
         // Check if the time falls within the invalid 02:00 range
-        if (hours !== 2) {
+        if (!dateTimeSQL.includes(" 02:")) {
             return dateTimeSQL; // Return only valid timestamps
         }
     }
@@ -144,7 +143,6 @@ function populateDatabaseSensor(amount) {
 
         con.query(DocSensor, function (err, result) {
             if (err) throw err;
-            console.log("1 record inserted in sensors");
         });
     }
 
@@ -162,7 +160,6 @@ function populateDatabaseElectricity(amount) {
 
         con.query(DocPlugg, function (err, result) {
             if (err) throw err;
-            console.log("1 record inserted in pluggs");
         });
 
     }
@@ -442,7 +439,6 @@ con.connect(function (err) {
             }
         })
 
-        /*
         //setup benchmarks 
         //fill database to 20000 records first 
         .add("fetch all lights of same id", { //TODO: convert to sql 
@@ -1108,9 +1104,9 @@ con.connect(function (err) {
                 }
             }
         })
-            */
 
-        .add("addOne write 1", { //max +- 150 rows
+
+        .add("addOne write 1", { //max +- 150 rows //TODO: make also for lamp/sensor 
             minSamples: 10,
             defer: true,
             maxTime: 0.05,
@@ -1178,7 +1174,6 @@ con.connect(function (err) {
 
                     // Extract the count
                     const countLampen = rowsLampen[0].count;
-                    console.log(countLampen);
                     // Delete all records or a specific number
                     const lampsToDelete = countLampen - sizeCollection;
 
@@ -1193,6 +1188,408 @@ con.connect(function (err) {
                     console.error('Error deleting records:', error);
                     deferred.reject(error);
                 }
+            }
+        })
+        .add("addOne write 100", { //max +- 150 rows
+            defer: true, // allows async operations
+            minSamples: 10,
+            maxTime: 0.05,
+            fn: async function (deferred) {
+
+                try {
+                    // Add one record
+                    await populateDatabaseLightsAddOne(100, lampen);
+                    //amountAddedLampen += 10;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error adding a record:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+        .add("Test deleted?", {
+            defer: true,
+            fn: async function (deferred) {
+                try {
+                    const [rowsLampen] = await con.promise().query(`SELECT COUNT(*) AS count FROM ??`, [lampen]);
+
+                    if (rowsLampen.length === 0) {
+                        throw new Error('No rows returned');
+                    }
+
+                    // Extract the count
+                    const countLampen = rowsLampen[0].count;
+                    // Delete all records or a specific number
+                    const lampsToDelete = countLampen - sizeCollection;
+
+                    // Delete all records or a specific number
+                    await deleteBefore(lampen, lampsToDelete);
+
+                    // Reset the counter
+                    amountAddedLampen = 0;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error deleting records:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+        .add("addOne write 1K", { //max +- 150 rows
+            defer: true, // allows async operations
+            minSamples: 10,
+            maxTime: 0.05,
+            fn: async function (deferred) {
+
+                try {
+                    // Add one record
+                    await populateDatabaseLightsAddOne(1000, lampen);
+                    //amountAddedLampen += 10;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error adding a record:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+        .add("Test deleted?", {
+            defer: true,
+            fn: async function (deferred) {
+                try {
+                    const [rowsLampen] = await con.promise().query(`SELECT COUNT(*) AS count FROM ??`, [lampen]);
+
+                    if (rowsLampen.length === 0) {
+                        throw new Error('No rows returned');
+                    }
+
+                    // Extract the count
+                    const countLampen = rowsLampen[0].count;
+                    // Delete all records or a specific number
+                    const lampsToDelete = countLampen - sizeCollection;
+
+                    // Delete all records or a specific number
+                    await deleteBefore(lampen, lampsToDelete);
+
+                    // Reset the counter
+                    amountAddedLampen = 0;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error deleting records:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+        .add("addOne write 5K", { //max +- 150 rows
+            defer: true, // allows async operations
+            minSamples: 10,
+            maxTime: 0.05,
+            fn: async function (deferred) {
+
+                try {
+                    // Add one record
+                    await populateDatabaseLightsAddOne(5000, lampen);
+                    //amountAddedLampen += 10;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error adding a record:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+        .add("Test deleted?", {
+            defer: true,
+            fn: async function (deferred) {
+                try {
+                    const [rowsLampen] = await con.promise().query(`SELECT COUNT(*) AS count FROM ??`, [lampen]);
+
+                    if (rowsLampen.length === 0) {
+                        throw new Error('No rows returned');
+                    }
+
+                    // Extract the count
+                    const countLampen = rowsLampen[0].count;
+                    // Delete all records or a specific number
+                    const lampsToDelete = countLampen - sizeCollection;
+
+                    // Delete all records or a specific number
+                    await deleteBefore(lampen, lampsToDelete);
+
+                    // Reset the counter
+                    amountAddedLampen = 0;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error deleting records:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+
+        .add("addAll write 1", { //max +- 150 rows //TODO: test with less runs 
+            defer: true, // allows async operations
+            minSamples: 1,
+            maxTime: 0.05,
+            fn: async function (deferred) {
+
+                try {
+                    // Add one record
+                    await populateDatabaseLights(1);
+                    //amountAddedLampen += 10;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error adding a record:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+        .add("Test deleted?", {
+            defer: true,
+            fn: async function (deferred) {
+                try {
+                    const [rowsLampen] = await con.promise().query(`SELECT COUNT(*) AS count FROM ??`, [lampen]);
+
+                    if (rowsLampen.length === 0) {
+                        throw new Error('No rows returned');
+                    }
+
+                    // Extract the count
+                    const countLampen = rowsLampen[0].count;
+                    // Delete all records or a specific number
+                    const lampsToDelete = countLampen - sizeCollection;
+
+                    // Delete all records or a specific number
+                    await deleteBefore(lampen, lampsToDelete);
+
+                    // Reset the counter
+                    amountAddedLampen = 0;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error deleting records:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+        .add("addAll write 10", { //max +- 150 rows //TODO: test with less runs 
+            defer: true, // allows async operations
+            minSamples: 1,
+            maxTime: 0.05,
+            fn: async function (deferred) {
+
+                try {
+                    // Add one record
+                    await populateDatabaseLights(10);
+                    //amountAddedLampen += 10;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error adding a record:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+        .add("Test deleted?", {
+            defer: true,
+            fn: async function (deferred) {
+                try {
+                    const [rowsLampen] = await con.promise().query(`SELECT COUNT(*) AS count FROM ??`, [lampen]);
+
+                    if (rowsLampen.length === 0) {
+                        throw new Error('No rows returned');
+                    }
+
+                    // Extract the count
+                    const countLampen = rowsLampen[0].count;
+                    // Delete all records or a specific number
+                    const lampsToDelete = countLampen - sizeCollection;
+
+                    // Delete all records or a specific number
+                    await deleteBefore(lampen, lampsToDelete);
+
+                    // Reset the counter
+                    amountAddedLampen = 0;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error deleting records:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+
+        .add("addAll write 100", { //max +- 150 rows //TODO: test with less runs 
+            defer: true, // allows async operations
+            minSamples: 1,
+            maxTime: 0.05,
+            fn: async function (deferred) {
+
+                try {
+                    // Add one record
+                    await populateDatabaseLights(100);
+                    //amountAddedLampen += 10;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error adding a record:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+        .add("Test deleted?", {
+            defer: true,
+            fn: async function (deferred) {
+                try {
+                    const [rowsLampen] = await con.promise().query(`SELECT COUNT(*) AS count FROM ??`, [lampen]);
+
+                    if (rowsLampen.length === 0) {
+                        throw new Error('No rows returned');
+                    }
+
+                    // Extract the count
+                    const countLampen = rowsLampen[0].count;
+                    // Delete all records or a specific number
+                    const lampsToDelete = countLampen - sizeCollection;
+
+                    // Delete all records or a specific number
+                    await deleteBefore(lampen, lampsToDelete);
+
+                    // Reset the counter
+                    amountAddedLampen = 0;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error deleting records:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+
+        .add("addAll write 1000", { //max +- 150 rows //TODO: test with less runs 
+            defer: true, // allows async operations
+            minSamples: 1,
+            maxTime: 0.05,
+            fn: async function (deferred) {
+
+                try {
+                    // Add one record
+                    await populateDatabaseLights(1000);
+                    //amountAddedLampen += 10;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error adding a record:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+        .add("Test deleted?", {
+            defer: true,
+            fn: async function (deferred) {
+                try {
+                    const [rowsLampen] = await con.promise().query(`SELECT COUNT(*) AS count FROM ??`, [lampen]);
+
+                    if (rowsLampen.length === 0) {
+                        throw new Error('No rows returned');
+                    }
+
+                    // Extract the count
+                    const countLampen = rowsLampen[0].count;
+                    // Delete all records or a specific number
+                    const lampsToDelete = countLampen - sizeCollection;
+
+                    // Delete all records or a specific number
+                    await deleteBefore(lampen, lampsToDelete);
+
+                    // Reset the counter
+                    amountAddedLampen = 0;
+
+                    deferred.resolve();
+                } catch (error) {
+                    console.error('Error deleting records:', error);
+                    deferred.reject(error);
+                }
+            }
+        })
+
+        .add("delete 1 record lampen", {
+            defer: true,
+            minSamples: 30,
+            fn: async function (deferred) {
+
+                await deleteBefore(lampen, 1);
+
+                deferred.resolve();
+            }
+        })
+        .add("Test added", {
+            defer: true,
+            fn: async function (deferred) {
+
+                await fillTo(sizeCollection);
+
+                deferred.resolve();
+            }
+        })
+        .add("delete 10 record lampen", {
+            defer: true,
+            minSamples: 30,
+            fn: async function (deferred) {
+
+                await deleteBefore(lampen, 10);
+
+                deferred.resolve();
+            }
+        })
+        .add("Test added", {
+            defer: true,
+            fn: async function (deferred) {
+
+                await fillTo(sizeCollection);
+
+                deferred.resolve();
+            }
+        })
+        .add("delete 100 record lampen", {
+            defer: true,
+            minSamples: 30,
+            fn: async function (deferred) {
+
+                await deleteBefore(lampen, 100);
+
+                deferred.resolve();
+            }
+        })
+        .add("Test added", {
+            defer: true,
+            fn: async function (deferred) {
+
+                await fillTo(sizeCollection);
+
+                deferred.resolve();
+            }
+        })
+        .add("delete 1K record lampen", {
+            defer: true,
+            minSamples: 30,
+            fn: async function (deferred) {
+
+                await deleteBefore(lampen, 1000);
+
+                deferred.resolve();
+            }
+        })
+        .add("Test added", {
+            defer: true,
+            fn: async function (deferred) {
+
+                await fillTo(sizeCollection);
+
+                deferred.resolve();
             }
         })
 

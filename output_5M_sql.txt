@@ -1,0 +1,256 @@
+Benchmark: deleting and filling database to wanted amount- Mean time: 123576.65456250003 ms
+
+
+
+- Total time: 1977226.47 msBenchmark: fetch all lights of same id
+- Mean time: 1358.1963073783782 ms- Runs: 37
+
+- Total time: 50253.26 ms
+Benchmark: fetch all sensonrs of same id- Mean time: 1307.396748945946 ms
+- Runs: 37
+- Total time: 48373.68 ms
+Benchmark: fetch all pluggs of same id
+
+- Mean time: 1311.9446475135137 ms- Runs: 16
+- Runs: 37
+Benchmark: fetch all of same id
+- Mean time: 3930.9134153437503 ms- Total time: 48541.95 ms
+- Runs: 32
+
+- Total time: 125789.23 msBenchmark: fetch all last minute -- lamp (20000 records)
+- Mean time: 3050.8591780303027 ms- Runs: 33
+
+
+
+- Total time: 100678.35 ms
+
+- Mean time: 2910.6010252727265 ms- Runs: 33
+
+
+- Mean time: 2961.4933901818194 ms- Total time: 96049.83 ms
+Benchmark: fetch all last minute -- pluggs (20000 records)
+- Runs: 33- Total time: 97729.28 msBenchmark: fetch all last 10 minutes -- lamp (20000 records)
+
+- Mean time: 3050.8045580909093 msBenchmark: fetch all last minute -- sensor (20000 records)
+- Total time: 100676.55 ms- Runs: 33
+
+
+- Mean time: 2910.1550820909097 msBenchmark: fetch all last 10 minutes -- sensor (20000 records)
+- Total time: 96035.12 ms
+
+Benchmark: fetch all last 10 minutes -- pluggs (20000 records)
+
+- Mean time: 2961.4308181212127 ms- Runs: 33- Runs: 33
+Benchmark: fetch all last 15 minutes -- lamp (20000 records)
+- Mean time: 3050.1301704545454 ms
+- Runs: 33
+- Total time: 100654.30 ms
+Benchmark: fetch all last 30 minutes -- lamp (20000 records)
+- Mean time: 3052.818720939393 ms
+- Runs: 33
+
+- Total time: 100743.02 msBenchmark: fetch all last hour -- lamp (20000 records)
+- Total time: 97727.22 ms- Mean time: 3047.3716893636365 ms- Runs: 33
+- Total time: 100563.27 ms
+
+Benchmark: fetch all last hour -- sensor (20000 records)
+- Runs: 33
+- Mean time: 2909.9468698787878 ms
+
+Benchmark: fetch all last hour -- pluggs (20000 records)- Mean time: 2964.615284151515 ms- Total time: 96028.25 ms
+
+- Runs: 33
+
+- Total time: 97832.30 ms
+
+
+- Mean time: 3048.1472612424245 ms
+- Runs: 33
+Benchmark: fetch all last 5 hours -- lamp (20000 records)- Total time: 100588.86 ms
+Benchmark: fetch all last 2 hours -- lamp (20000 records)- Runs: 33
+- Total time: 100647.03 ms
+Benchmark: fetch all last 12 hours -- lamp (20000 records)- Mean time: 3051.853277787878 ms
+
+- Runs: 33
+- Total time: 100711.16 ms
+Benchmark: fetch all last 12 hours -- sensor (20000 records)
+- Mean time: 2906.631962030303 ms
+
+
+- Mean time: 3049.9100088484847 ms
+- Total time: 95918.85 ms- Runs: 33
+
+- Mean time: 2964.285378666667 ms
+- Total time: 97821.42 ms
+Benchmark: fetch all last 24 hours -- lamp (20000 records)
+- Mean time: 3052.623774 ms
+- Runs: 33
+- Total time: 100736.58 ms
+
+
+- Runs: 33- Mean time: 2907.3638030909096 ms- Runs: 33
+- Total time: 95943.01 msBenchmark: fetch all last 24 hours -- sensor (20000 records)
+
+- Mean time: 2963.845464666667 msBenchmark: fetch all last 24 hours -- pluggs (20000 records)- Runs: 33
+- Total time: 97806.90 ms
+Benchmark: fetch all last 30 minutes -- all (20000 records)
+Benchmark: fetch all last 12 hours -- pluggs (20000 records)
+- Mean time: 8923.048681451615 ms
+
+- Runs: 31
+- Total time: 276614.51 ms- Mean time: 8923.240783612904 ms
+- Runs: 31
+- Total time: 276620.46 msBenchmark: fetch all last hour -- all (20000 records)Benchmark: fetch all last 2 hours -- all (20000 records)
+- Mean time: 8925.582564516128 ms
+- Runs: 31
+
+- Total time: 276693.06 ms
+
+- Mean time: 8936.167385806451 ms
+- Runs: 31
+
+
+Benchmark: fetch all last 12 hours -- all (20000 records)- Total time: 277021.19 ms
+
+
+- Total time: 276669.73 msBenchmark: fetch all last 5 hours -- all (20000 records)
+
+Benchmark: fetch all last 24 hours -- all (20000 records)
+- Runs: 31
+- Total time: 276613.19 ms
+Benchmark: update 1 value in a row - lampen (20000 records)
+- Mean time: 0.27183195015076306 ms
+- Runs: 111
+- Total time: 30.17 ms- Mean time: 8923.006043 msBenchmark: update 2 values in a row - lampen (20000 records)
+
+- Mean time: 8924.829903193548 ms- Runs: 109- Mean time: 0.2812452580422108 ms
+- Runs: 31- Total time: 30.66 ms
+Benchmark: update 3 values in a row - lampen (20000 records)
+
+- Mean time: 0.34117703104443214 ms
+- Runs: 103
+- Total time: 35.14 ms
+Benchmark: update 1 column - lampen (20000 records)
+- Mean time: 0.30161659339830954 ms
+- Runs: 109- Total time: 32.88 ms
+Benchmark: update 2 column - lampen (20000 records)- Mean time: 0.5890128120368416 ms
+
+- Runs: 105- Total time: 61.85 ms
+Benchmark: update 5 column - lampen (20000 records)
+
+- Mean time: 1.4585369840476186 ms- Runs: 105
+- Total time: 153.15 ms
+Benchmark: update 10 column - lampen (20000 records)
+- Mean time: 2.9143294129519894 ms
+- Runs: 105
+
+
+Benchmark: update 20 column - lampen (20000 records)- Total time: 306.00 ms
+
+- Mean time: 5.710533057632397 ms
+- Runs: 107
+
+Benchmark: addOne write 1
+
+- Mean time: 0.16493033758938053 ms
+- Total time: 1.65 ms- Total time: 611.03 msBenchmark: Test deleted?- Mean time: 965.4681837027028 ms
+- Runs: 37
+
+- Total time: 35722.32 ms
+Benchmark: addOne write 10- Runs: 10
+
+
+
+- Total time: 16.12 ms- Runs: 10Benchmark: Test deleted?- Mean time: 1.6124282531249998 ms
+- Mean time: 1041.402866805556 ms- Runs: 36
+
+
+- Total time: 37490.50 ms
+Benchmark: addOne write 100
+
+- Runs: 10- Total time: 160.11 ms
+Benchmark: Test deleted?
+- Mean time: 1026.1947848918912 ms
+- Runs: 37
+- Total time: 37969.21 ms
+Benchmark: addOne write 1K
+- Mean time: 162.4736624 ms
+- Runs: 10
+- Total time: 1624.74 ms
+Benchmark: Test deleted?- Mean time: 16.010975308333336 ms
+- Mean time: 2183.630265810811 ms- Runs: 37
+- Total time: 80794.32 ms
+
+Benchmark: addOne write 5K
+- Mean time: 744.4604335000001 ms
+- Runs: 10
+- Total time: 7444.60 msBenchmark: Test deleted?
+
+- Mean time: 10378.804667864864 ms
+- Runs: 37
+
+- Total time: 384015.77 ms
+Benchmark: addAll write 1
+- Runs: 1
+
+- Mean time: 0.006519415372670808 ms- Total time: 0.01 ms
+
+Benchmark: Test deleted?
+
+- Runs: 36
+Benchmark: addAll write 10- Mean time: 6261.059084500001 ms- Total time: 225398.13 ms
+
+- Mean time: 0.020627996444093244 ms- Runs: 1
+
+Benchmark: Test deleted?
+- Mean time: 24268.476679416657 ms- Total time: 0.02 ms- Runs: 36- Total time: 873665.16 ms
+
+
+
+Benchmark: addAll write 100- Mean time: 0.1427171168091168 ms
+- Runs: 1
+- Total time: 0.14 ms
+Benchmark: Test deleted?
+- Mean time: 21692.446358605263 ms- Runs: 38
+- Total time: 824312.96 ms
+
+Benchmark: addAll write 1000
+
+- Runs: 1
+
+- Mean time: 2.0831824827586205 ms- Total time: 2.08 ms- Mean time: 9079.529831 ms
+
+- Runs: 37Benchmark: Test deleted?
+- Total time: 335942.60 msBenchmark: delete 1 record lampen
+
+
+- Mean time: 7.731571203703706 ms
+
+- Runs: 108
+
+Benchmark: Test added- Total time: 835.01 ms- Runs: 17
+
+- Total time: 7024.68 msBenchmark: delete 10 record lampen- Mean time: 413.2165931176471 ms- Runs: 87- Total time: 6672.41 ms
+- Mean time: 76.6943384827586 ms
+
+Benchmark: Test added
+- Mean time: 432.721685 ms
+
+
+- Runs: 16
+- Total time: 6923.55 msBenchmark: delete 100 record lampen
+- Mean time: 768.787650472222 ms
+- Total time: 27676.36 ms
+Benchmark: Test added
+- Runs: 36
+
+
+- Runs: 16
+- Mean time: 461.0142968125 ms
+- Total time: 7376.23 ms- Mean time: 7709.836606966665 msBenchmark: delete 1K record lampen
+- Total time: 231295.10 ms- Runs: 30
+
+- Mean time: 717.4699611249999 msBenchmark: Test added- Runs: 16
+- Total time: 11479.52 ms
+
+
