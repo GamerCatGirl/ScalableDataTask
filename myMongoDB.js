@@ -6,14 +6,17 @@ const uri = "mongodb://localhost:27017/";
 let printed = false;
 const fs = require('fs');
 let DB = null;
-let duringFile = "output_during_mongo.txt";
+
+
+let duringFile = "output_during_5M_mongo.txt";
+let completeFile = "output_5M_mongo.txt"
 
 //TO check what is added to delete short after the test 
 let amountAddedLampen = 0;
 let amountAddedElec = 0;
 let amountAddedSensor = 0;
 let toDelete = 0;
-let sizeCollection = 20000;
+let sizeCollection = 5000000;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -321,7 +324,7 @@ async function fetchDataLampName(lampen) {
 }
 
 async function deleteBefore(db, amount) {
-    const cutoffDate = new Date('2024-11-25T00:00:00Z');
+    const cutoffDate = new Date('2024-12-30T22:29:00.008Z');
     const filter = { timeStamp: { $lt: cutoffDate } };
 
     for (let i = 0; i < amount; i++) {
@@ -343,6 +346,7 @@ async function fillTo(amount) {
     const toFillSensors = amount - countSensors;
     const toFillElec = amount - countElec;
 
+
     if (!printed) {
         console.log(toFillLampen);
         console.log(toFillSensors);
@@ -355,6 +359,10 @@ async function fillTo(amount) {
     await populateDatabaseSensor(toFillSensors, sensors);
 
 }
+
+printed2 = false;
+filled = false;
+toFill = sizeCollection;
 
 suite
     .on('start', async function () {
@@ -371,7 +379,7 @@ suite
         fs.appendFile(duringFile, "\n", (err) => { if (err) throw err });
     })
 
-    //TODO: add test to see how long it takes to fetch a single collection 
+    // add test to see how long it takes to fetch a single collection 
 
     .add("deleting and filling database to wanted amount", {
         defer: true,
@@ -381,14 +389,16 @@ suite
             await deleteBefore(lampen, toDelete);
             toDelete = 0;
 
-            await fillTo(sizeCollection);
+            await fillTo(toFill);
+            toFill = 0;
             deferred.resolve();
         }
     })
 
+
     //setup benchmarks 
     //fill database to 20000 records first 
-    .add("fetch all lights of same id (20000 records)", {
+    .add("fetch all lights of same id", {
         defer: true, //allows async operations
         minSamples: 30,
         maxTime: 10,
@@ -410,7 +420,7 @@ suite
             }
         }
     })
-    .add("fetch all sensors of same id (20000 records)", {
+    .add("fetch all sensors of same id", {
         defer: true, //allows async operations
         minSamples: 30,
         maxTime: 10,
@@ -431,7 +441,7 @@ suite
             }
         }
     })
-    .add("fetch all elec of same id (20000 records)", {
+    .add("fetch all pluggs of same id", {
         defer: true, //allows async operations
         minSamples: 30,
         maxTime: 10,
@@ -450,36 +460,6 @@ suite
                 console.error('Error during fetch:', error);
                 deferred.resolve(); // Ensure deferred completion even on error
             }
-        }
-    })
-
-    //fetch most resent data for certain id (for all) 
-    .add("fetch all most recent of same id (20000 records)", {
-        defer: true, //allows async operations
-        minSamples: 30,
-        maxTime: 10,
-        fn: async function (deferred) {
-            const id = getRandomInt(100);
-            const DeviceNamePlugg = "Plugg " + id.toString();
-            const DeviceNameLamp = "Lamp " + id.toString();
-            const DeviceNameSensor = "Sensor " + id.toString();
-
-            const lampen = await DB.collection("lamps");
-            const sensors = await DB.collection("sensors");
-            const elictricity = await DB.collection("Wall Pluggs");
-
-            //most recent 
-            const queryLamp = { deviceName: DeviceNameLamp };
-            await lampen.findOne(queryLamp, { sort: { timeStamp: -1 } });
-
-            const queryPlugg = { deviceName: DeviceNamePlugg };
-            await elictricity.findOne(queryPlugg, { sort: { timeStamp: -1 } });
-
-            const querySensor = { deviceName: DeviceNameSensor };
-            await sensors.findOne(querySensor, { sort: { timeStamp: -1 } });
-
-            deferred.resolve();
-
         }
     })
 
@@ -801,9 +781,13 @@ suite
         }
     })
 
+
+
     // TODO: compare database sorted vs unsorted previous
     //update 
     //update 1 value in a row 
+
+
     .add("update 1 value in a row - lampen (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -1211,10 +1195,13 @@ suite
         }
     })
 
+
+
     // compare addAll/add one by one 
     .add("addOne write 1 (20000 records)", { //max +- 150 documents  
         defer: true, //allows async operations
-        minSamples: 30,
+        minSamples: 10,
+        maxTime: 0.05,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
 
@@ -1227,7 +1214,11 @@ suite
         defer: true,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-            await deleteBefore(lampen, amountAddedLampen);
+            // amount currenly - amount 
+            const countLampen = await lampen.countDocuments();
+
+            const toFillLampen = countLampen - sizeCollection;
+            await deleteBefore(lampen, toFillLampen);
 
             amountAddedLampen = 0;
             deferred.resolve();
@@ -1236,7 +1227,8 @@ suite
 
     .add("addOne write 10 (20000 records)", { //max +- 1500 docs
         defer: true, //allows async operations
-        minSamples: 30,
+        minSamples: 10,
+        maxTime: 0.05,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
 
@@ -1249,15 +1241,21 @@ suite
         defer: true,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-            await deleteBefore(lampen, amountAddedLampen);
+            // amount currenly - amount 
+            const countLampen = await lampen.countDocuments();
+
+            const toFillLampen = countLampen - sizeCollection;
+            await deleteBefore(lampen, toFillLampen);
 
             amountAddedLampen = 0;
             deferred.resolve();
         }
     })
+
     .add("addOne write 100 (20000 records)", { //max +- 15K docs
         defer: true, //allows async operations
-        minSamples: 30,
+        minSamples: 10,
+        maxTime: 0.05,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
 
@@ -1270,15 +1268,21 @@ suite
         defer: true,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-            await deleteBefore(lampen, amountAddedLampen);
+            const countLampen = await lampen.countDocuments();
+
+            const toFillLampen = countLampen - sizeCollection;
+            await deleteBefore(lampen, toFillLampen);
 
             amountAddedLampen = 0;
             deferred.resolve();
         }
     })
+
+
     .add("addOne write 1K (20000 records)", { //max +- 150K docs 
         defer: true, //allows async operations
-        minSamples: 30,
+        minSamples: 10,
+        maxTime: 0.05,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
 
@@ -1291,7 +1295,10 @@ suite
         defer: true,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-            await deleteBefore(lampen, amountAddedLampen);
+            const countLampen = await lampen.countDocuments();
+
+            const toFillLampen = countLampen - sizeCollection;
+            await deleteBefore(lampen, toFillLampen);
 
             amountAddedLampen = 0;
             deferred.resolve();
@@ -1300,7 +1307,8 @@ suite
     //can be used for bigger db's 
     .add("addOne write 5K (20000 records)", {
         defer: true, //allows async operations
-        minSamples: 30,
+        minSamples: 10,
+        maxTime: 0.05,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
 
@@ -1313,15 +1321,20 @@ suite
         defer: true,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-            await deleteBefore(lampen, amountAddedLampen);
+            const countLampen = await lampen.countDocuments();
+
+            const toFillLampen = countLampen - sizeCollection;
+            await deleteBefore(lampen, toFillLampen);
 
             amountAddedLampen = 0;
             deferred.resolve();
         }
     })
+
     .add("addAll write 1 (20000 records)", {
         defer: true, //allows async operations
-        minSamples: 30,
+        minSamples: 1,
+        maxTime: 0.05,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
 
@@ -1334,15 +1347,20 @@ suite
         defer: true,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-            await deleteBefore(lampen, amountAddedLampen);
+            const countLampen = await lampen.countDocuments();
+
+            const toFillLampen = countLampen - sizeCollection;
+            await deleteBefore(lampen, toFillLampen);
 
             amountAddedLampen = 0;
             deferred.resolve();
         }
     })
+
     .add("addAll write 10 (20000 records)", {
         defer: true, //allows async operations
-        minSamples: 30,
+        minSamples: 1,
+        maxTime: 0.05,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
 
@@ -1355,7 +1373,10 @@ suite
         defer: true,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-            await deleteBefore(lampen, amountAddedLampen);
+            const countLampen = await lampen.countDocuments();
+
+            const toFillLampen = countLampen - sizeCollection;
+            await deleteBefore(lampen, toFillLampen);
 
             amountAddedLampen = 0;
             deferred.resolve();
@@ -1363,7 +1384,8 @@ suite
     })
     .add("addAll write 100 (20000 records)", {
         defer: true, //allows async operations
-        minSamples: 30,
+        minSamples: 1,
+        maxTime: 0.05,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
 
@@ -1376,15 +1398,19 @@ suite
         defer: true,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-            await deleteBefore(lampen, amountAddedLampen);
+            const countLampen = await lampen.countDocuments();
+
+            const toFillLampen = countLampen - sizeCollection;
+            await deleteBefore(lampen, toFillLampen);
 
             amountAddedLampen = 0;
             deferred.resolve();
         }
     })
-    .add("addAll write 1K (20000 records)", {
+    .add("addAll write 1000 (20000 records)", {
         defer: true, //allows async operations
-        minSamples: 30,
+        minSamples: 1,
+        maxTime: 0.05,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
 
@@ -1397,43 +1423,27 @@ suite
         defer: true,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-            await deleteBefore(lampen, amountAddedLampen);
+            const countLampen = await lampen.countDocuments();
 
-            amountAddedLampen = 0;
-            deferred.resolve();
-        }
-    })
-    .add("addAll write 5K (20000 records)", {
-        defer: true, //allows async operations
-        minSamples: 30,
-        fn: async function (deferred) {
-            const lampen = await DB.collection("lamps");
-
-            await populateDatabaseLights(5000, lampen);
-
-            deferred.resolve();
-        }
-    })
-    .add("Test deleted?", {
-        defer: true,
-        fn: async function (deferred) {
-            const lampen = await DB.collection("lamps");
-            await deleteBefore(lampen, amountAddedLampen);
+            const toFillLampen = countLampen - sizeCollection;
+            await deleteBefore(lampen, toFillLampen);
 
             amountAddedLampen = 0;
             deferred.resolve();
         }
     })
 
+    /*
+ 
     .add("add 1 data in lamps (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
         maxTime: 10,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-
+ 
             await populateDatabaseLights(1, lampen);
-
+ 
             deferred.resolve();
         }
     })
@@ -1442,12 +1452,12 @@ suite
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
             await deleteBefore(lampen, amountAddedLampen);
-
+ 
             amountAddedLampen = 0;
             deferred.resolve();
         }
     })
-
+ 
     .add("add 1 data in sensor (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -1456,7 +1466,7 @@ suite
             const sensors = await DB.collection("sensors");
             await populateDatabaseSensor(1, sensors);
             deferred.resolve();
-
+ 
         }
     })
     .add("Test deleted?", {
@@ -1466,18 +1476,18 @@ suite
             const sensors = await DB.collection("sensors");
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             deferred.resolve();
         }
     })
-
+ 
     .add("add 1 data in pluggs (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
         fn: async function (deferred) {
-
+ 
             const elictricity = await DB.collection("Wall Pluggs");
             await populateDatabaseElectricity(1, elictricity);
             deferred.resolve();
@@ -1492,7 +1502,7 @@ suite
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
             await deleteBefore(elictricity, amountAddedElec);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             amountAddedElec = 0;
@@ -1505,9 +1515,9 @@ suite
         maxTime: 10,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-
+ 
             await populateDatabaseLights(10, lampen);
-
+ 
             deferred.resolve();
         }
     })
@@ -1516,12 +1526,12 @@ suite
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
             await deleteBefore(lampen, amountAddedLampen);
-
+ 
             amountAddedLampen = 0;
             deferred.resolve();
         }
     })
-
+ 
     .add("add 10 data in sensor (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -1530,7 +1540,7 @@ suite
             const sensors = await DB.collection("sensors");
             await populateDatabaseSensor(10, sensors);
             deferred.resolve();
-
+ 
         }
     })
     .add("Test deleted?", {
@@ -1540,18 +1550,18 @@ suite
             const sensors = await DB.collection("sensors");
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             deferred.resolve();
         }
     })
-
+ 
     .add("add 10 data in pluggs (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
         fn: async function (deferred) {
-
+ 
             const elictricity = await DB.collection("Wall Pluggs");
             await populateDatabaseElectricity(10, elictricity);
             deferred.resolve();
@@ -1566,7 +1576,7 @@ suite
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
             await deleteBefore(elictricity, amountAddedElec);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             amountAddedElec = 0;
@@ -1579,9 +1589,9 @@ suite
         maxTime: 10,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-
+ 
             await populateDatabaseLights(100, lampen);
-
+ 
             deferred.resolve();
         }
     })
@@ -1590,12 +1600,12 @@ suite
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
             await deleteBefore(lampen, amountAddedLampen);
-
+ 
             amountAddedLampen = 0;
             deferred.resolve();
         }
     })
-
+ 
     .add("add 100 data in sensor (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -1604,7 +1614,7 @@ suite
             const sensors = await DB.collection("sensors");
             await populateDatabaseSensor(100, sensors);
             deferred.resolve();
-
+ 
         }
     })
     .add("Test deleted?", {
@@ -1614,18 +1624,18 @@ suite
             const sensors = await DB.collection("sensors");
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             deferred.resolve();
         }
     })
-
+ 
     .add("add 100 data in pluggs (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
         fn: async function (deferred) {
-
+ 
             const elictricity = await DB.collection("Wall Pluggs");
             await populateDatabaseElectricity(100, elictricity);
             deferred.resolve();
@@ -1640,7 +1650,7 @@ suite
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
             await deleteBefore(elictricity, amountAddedElec);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             amountAddedElec = 0;
@@ -1653,9 +1663,9 @@ suite
         maxTime: 10,
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
-
+ 
             await populateDatabaseLights(1000, lampen);
-
+ 
             deferred.resolve();
         }
     })
@@ -1664,12 +1674,12 @@ suite
         fn: async function (deferred) {
             const lampen = await DB.collection("lamps");
             await deleteBefore(lampen, amountAddedLampen);
-
+ 
             amountAddedLampen = 0;
             deferred.resolve();
         }
     })
-
+ 
     .add("add 1000 data in sensor (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -1678,7 +1688,7 @@ suite
             const sensors = await DB.collection("sensors");
             await populateDatabaseSensor(1000, sensors);
             deferred.resolve();
-
+ 
         }
     })
     .add("Test deleted?", {
@@ -1688,18 +1698,18 @@ suite
             const sensors = await DB.collection("sensors");
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             deferred.resolve();
         }
     })
-
+ 
     .add("add 1000 data in pluggs (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
         fn: async function (deferred) {
-
+ 
             const elictricity = await DB.collection("Wall Pluggs");
             await populateDatabaseElectricity(1000, elictricity);
             deferred.resolve();
@@ -1714,17 +1724,17 @@ suite
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
             await deleteBefore(elictricity, amountAddedElec);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             amountAddedElec = 0;
             deferred.resolve();
         }
     })
-
-
-
-
+ 
+ 
+ 
+ 
     .add("add 1 data in all (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -1732,11 +1742,11 @@ suite
             const lampen = await DB.collection("lamps");
             const sensors = await DB.collection("sensors");
             const elictricity = await DB.collection("Wall Pluggs");
-
+ 
             await populateDatabaseLights(1, lampen);
             await populateDatabaseElectricity(1, elictricity);
             await populateDatabaseSensor(1, sensors);
-
+ 
             deferred.resolve();
         }
     })
@@ -1749,14 +1759,14 @@ suite
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
             await deleteBefore(elictricity, amountAddedElec);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             amountAddedElec = 0;
             deferred.resolve();
         }
     })
-
+ 
     .add("add 10 data in all (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -1764,11 +1774,11 @@ suite
             const lampen = await DB.collection("lamps");
             const sensors = await DB.collection("sensors");
             const elictricity = await DB.collection("Wall Pluggs");
-
+ 
             await populateDatabaseLights(10, lampen);
             await populateDatabaseElectricity(10, elictricity);
             await populateDatabaseSensor(10, sensors);
-
+ 
             deferred.resolve();
         }
     })
@@ -1781,14 +1791,14 @@ suite
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
             await deleteBefore(elictricity, amountAddedElec);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             amountAddedElec = 0;
             deferred.resolve();
         }
     })
-
+ 
     .add("add 100 data in all (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -1796,11 +1806,11 @@ suite
             const lampen = await DB.collection("lamps");
             const sensors = await DB.collection("sensors");
             const elictricity = await DB.collection("Wall Pluggs");
-
+ 
             await populateDatabaseLights(100, lampen);
             await populateDatabaseElectricity(100, elictricity);
             await populateDatabaseSensor(100, sensors);
-
+ 
             deferred.resolve();
         }
     })
@@ -1813,15 +1823,15 @@ suite
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
             await deleteBefore(elictricity, amountAddedElec);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             amountAddedElec = 0;
             deferred.resolve();
         }
     })
-
-
+ 
+ 
     .add("add 1K data in all (20000 records)", {
         defer: true, //allows async operations
         minSamples: 30,
@@ -1829,11 +1839,11 @@ suite
             const lampen = await DB.collection("lamps");
             const sensors = await DB.collection("sensors");
             const elictricity = await DB.collection("Wall Pluggs");
-
+ 
             await populateDatabaseLights(1000, lampen);
             await populateDatabaseElectricity(1000, elictricity);
             await populateDatabaseSensor(1000, sensors);
-
+ 
             deferred.resolve();
         }
     })
@@ -1846,13 +1856,19 @@ suite
             await deleteBefore(lampen, amountAddedLampen);
             await deleteBefore(sensors, amountAddedSensor);
             await deleteBefore(elictricity, amountAddedElec);
-
+ 
             amountAddedLampen = 0;
             amountAddedSensor = 0;
             amountAddedElec = 0;
             deferred.resolve();
         }
     })
+        */
+
+
+
+
+
     .add("delete 1 record lampen", {
         defer: true,
         minSamples: 30,
@@ -1864,15 +1880,19 @@ suite
             deferred.resolve();
         }
     })
+
+
     .add("Test added", {
         defer: true,
         fn: async function (deferred) {
-
-            await fillTo(sizeCollection);
-
+            await fillTo(toFill);
+            toFill = 0;
             deferred.resolve();
         }
     })
+
+
+
     .add("delete 10 record lampen", {
         defer: true,
         minSamples: 30,
@@ -1887,9 +1907,8 @@ suite
     .add("Test added", {
         defer: true,
         fn: async function (deferred) {
-
-            await fillTo(sizeCollection);
-
+            await fillTo(toFill);
+            toFill = 0;
             deferred.resolve();
         }
     })
@@ -1907,14 +1926,12 @@ suite
     .add("Test added", {
         defer: true,
         fn: async function (deferred) {
-
-            await fillTo(sizeCollection);
-
+            await fillTo(toFill);
+            toFill = 0;
             deferred.resolve();
         }
     })
-    /*
-    .add("delete 1000 record lampen", {
+    .add("delete 1K record lampen", {
         defer: true,
         minSamples: 30,
         fn: async function (deferred) {
@@ -1928,33 +1945,34 @@ suite
     .add("Test added", {
         defer: true,
         fn: async function (deferred) {
-
-            await fillTo(sizeCollection);
-
+            await fillTo(toFill);
+            toFill = 0;
             deferred.resolve();
         }
     })
-            .add("delete 5K record lampen", {
-        defer: true,
-        minSamples: 30,
-        fn: async function (deferred) {
-            const lampen = await DB.collection("lamps");
-
-            await deleteBefore(lampen, 5000);
-
-            deferred.resolve();
-        }
+    /*
+     .add("delete 5K record lampen", {
+    defer: true,
+    minSamples: 30,
+    fn: async function (deferred) {
+     const lampen = await DB.collection("lamps");
+    
+     await deleteBefore(lampen, 5000);
+    
+     deferred.resolve();
+    }
     })
     .add("Test added", {
-        defer: true,
-        fn: async function (deferred) {
-
-            await fillTo(sizeCollection);
-
-            deferred.resolve();
-        }
+    defer: true,
+    fn: async function (deferred) {
+    
+    
+     await fillTo(sizeCollection);
+    
+     deferred.resolve();
+    }
     })
-        */
+    */
 
 
     //TODO: fill to 50K records 
@@ -1970,13 +1988,12 @@ suite
     //TODO: fill to 5M records 
 
     // Log benchmark results
-    .on('cycle', async function (event) {
+    .on('cycle', function (event) {
         console.log(String(event.target)); // Logs details of each benchmark
-        let time = new Date()
-        fs.appendFile(duringFile, String(time), (err) => { if (err) throw err });
-        fs.appendFile(duringFile, "\n", (err) => { if (err) throw err });
-        fs.appendFile(duringFile, String(event.target), (err) => { if (err) throw err });
-        fs.appendFile(duringFile, "\n", (err) => { if (err) throw err });
+        fs.appendFile(duringFile, String(event.target) + "\n", (err) => { if (err) throw err });
+        filled = false;
+        toFill = sizeCollection;
+
         // delete elements added 
     })
     .on('complete', function () {
@@ -1984,10 +2001,10 @@ suite
         let time = new Date()
         fs.appendFile(duringFile, String(time), (err) => { if (err) throw err });
 
-        let file = "output_mongo.txt";
+        let file = completeFile;
 
         this.forEach(benchmark => {
-            //TODO: write to csv 
+            // write to csv 
             let benchmarkName = `Benchmark: ${benchmark.name}`
             let meanTime = `- Mean time: ${benchmark.stats.mean * 1000} ms`
             let runs = `- Runs: ${benchmark.stats.sample.length}`

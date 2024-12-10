@@ -1,20 +1,21 @@
 Benchmark: deleting and filling database to wanted amount
-- Runs: 72- Total time: 245962.53 ms
+- Runs: 72
+- Total time: 245962.53 ms
+- Mean time: 3416.1462025416663 ms
 
-- Mean time: 3416.1462025416663 ms- Mean time: 242.12983700000007 ms
+- Mean time: 242.12983700000007 ms
+
 Benchmark: fetch all lights of same id
-
 - Runs: 69
 Benchmark: fetch all sensonrs of same id
-
 - Total time: 16706.96 ms
-- Mean time: 241.22169562318842 ms- Total time: 16644.30 ms- Runs: 69
+- Mean time: 241.22169562318842 ms
+- Total time: 16644.30 ms- Runs: 69
 Benchmark: fetch all pluggs of same id- Mean time: 237.35562918571432 ms
 - Runs: 70
-
 - Total time: 16614.89 ms
-
-- Mean time: 747.6080551627907 ms- Runs: 43
+- Mean time: 747.6080551627907 ms
+- Runs: 43
 
 - Total time: 32147.15 ms
 Benchmark: fetch all last minute -- lamp (20000 records)- Mean time: 600.008227326087 msBenchmark: fetch all of same id
