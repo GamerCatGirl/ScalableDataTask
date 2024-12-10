@@ -1,0 +1,130 @@
+Sun Dec 08 2024 09:43:11 GMT+0100 (Central European Standard Time)
+
+Sun Dec 08 2024 10:16:08 GMT+0100 (Central European Standard Time)deleting and filling database to wanted amount x 0.01 ops/sec ±154.85% (16 runs sampled)
+
+
+Sun Dec 08 2024 10:16:59 GMT+0100 (Central European Standard Time)fetch all lights of same id x 0.74 ops/sec ±0.08% (37 runs sampled)Sun Dec 08 2024 10:17:48 GMT+0100 (Central European Standard Time)
+fetch all sensonrs of same id x 0.76 ops/sec ±0.13% (37 runs sampled)
+
+Sun Dec 08 2024 10:18:37 GMT+0100 (Central European Standard Time)fetch all pluggs of same id x 0.76 ops/sec ±0.34% (37 runs sampled)
+
+Sun Dec 08 2024 10:20:44 GMT+0100 (Central European Standard Time)
+fetch all of same id x 0.25 ops/sec ±0.07% (32 runs sampled)Sun Dec 08 2024 10:22:25 GMT+0100 (Central European Standard Time)
+
+fetch all last minute -- lamp (20000 records) x 0.33 ops/sec ±0.04% (33 runs sampled)
+Sun Dec 08 2024 10:24:02 GMT+0100 (Central European Standard Time)fetch all last minute -- sensor (20000 records) x 0.34 ops/sec ±0.05% (33 runs sampled)
+
+Sun Dec 08 2024 10:25:40 GMT+0100 (Central European Standard Time)
+fetch all last minute -- pluggs (20000 records) x 0.34 ops/sec ±0.08% (33 runs sampled)
+fetch all last 10 minutes -- lamp (20000 records) x 0.33 ops/sec ±0.05% (33 runs sampled)
+Sun Dec 08 2024 10:27:21 GMT+0100 (Central European Standard Time)
+Sun Dec 08 2024 10:28:58 GMT+0100 (Central European Standard Time)fetch all last 10 minutes -- sensor (20000 records) x 0.34 ops/sec ±0.03% (33 runs sampled)
+fetch all last 10 minutes -- pluggs (20000 records) x 0.34 ops/sec ±0.08% (33 runs sampled)Sun Dec 08 2024 10:30:36 GMT+0100 (Central European Standard Time)
+
+
+Sun Dec 08 2024 10:32:17 GMT+0100 (Central European Standard Time)fetch all last 15 minutes -- lamp (20000 records) x 0.33 ops/sec ±0.06% (33 runs sampled)
+
+fetch all last 30 minutes -- lamp (20000 records) x 0.33 ops/sec ±0.09% (33 runs sampled)
+Sun Dec 08 2024 10:33:59 GMT+0100 (Central European Standard Time)Sun Dec 08 2024 10:35:40 GMT+0100 (Central European Standard Time)
+fetch all last hour -- lamp (20000 records) x 0.33 ops/sec ±0.06% (33 runs sampled)
+Sun Dec 08 2024 10:37:16 GMT+0100 (Central European Standard Time)
+
+fetch all last hour -- sensor (20000 records) x 0.34 ops/sec ±0.06% (33 runs sampled)fetch all last hour -- pluggs (20000 records) x 0.34 ops/sec ±0.04% (33 runs sampled)
+
+Sun Dec 08 2024 10:38:55 GMT+0100 (Central European Standard Time)
+fetch all last 2 hours -- lamp (20000 records) x 0.33 ops/sec ±0.08% (33 runs sampled)Sun Dec 08 2024 10:40:36 GMT+0100 (Central European Standard Time)
+
+fetch all last 5 hours -- lamp (20000 records) x 0.33 ops/sec ±0.05% (33 runs sampled)Sun Dec 08 2024 10:42:17 GMT+0100 (Central European Standard Time)
+
+Sun Dec 08 2024 10:43:58 GMT+0100 (Central European Standard Time)
+fetch all last 12 hours -- lamp (20000 records) x 0.33 ops/sec ±0.03% (33 runs sampled)Sun Dec 08 2024 10:45:35 GMT+0100 (Central European Standard Time)
+
+fetch all last 12 hours -- sensor (20000 records) x 0.34 ops/sec ±0.07% (33 runs sampled)Sun Dec 08 2024 10:47:13 GMT+0100 (Central European Standard Time)fetch all last 12 hours -- pluggs (20000 records) x 0.34 ops/sec ±0.07% (33 runs sampled)
+
+Sun Dec 08 2024 10:48:55 GMT+0100 (Central European Standard Time)fetch all last 24 hours -- lamp (20000 records) x 0.33 ops/sec ±0.05% (33 runs sampled)
+
+
+
+Sun Dec 08 2024 10:50:31 GMT+0100 (Central European Standard Time)fetch all last 24 hours -- sensor (20000 records) x 0.34 ops/sec ±0.07% (33 runs sampled)Sun Dec 08 2024 10:52:10 GMT+0100 (Central European Standard Time)fetch all last 24 hours -- pluggs (20000 records) x 0.34 ops/sec ±0.06% (33 runs sampled)
+
+Sun Dec 08 2024 10:56:47 GMT+0100 (Central European Standard Time)
+fetch all last 30 minutes -- all (20000 records) x 0.11 ops/sec ±0.06% (31 runs sampled)
+Sun Dec 08 2024 11:01:24 GMT+0100 (Central European Standard Time)
+fetch all last hour -- all (20000 records) x 0.11 ops/sec ±0.09% (31 runs sampled)
+Sun Dec 08 2024 11:06:01 GMT+0100 (Central European Standard Time)fetch all last 2 hours -- all (20000 records) x 0.11 ops/sec ±0.09% (31 runs sampled)
+
+Sun Dec 08 2024 11:10:39 GMT+0100 (Central European Standard Time)
+fetch all last 5 hours -- all (20000 records) x 0.11 ops/sec ±0.05% (31 runs sampled)
+
+fetch all last 12 hours -- all (20000 records) x 0.11 ops/sec ±0.05% (31 runs sampled)Sun Dec 08 2024 11:15:16 GMT+0100 (Central European Standard Time)
+Sun Dec 08 2024 11:19:53 GMT+0100 (Central European Standard Time)
+fetch all last 24 hours -- all (20000 records) x 0.11 ops/sec ±0.05% (31 runs sampled)
+Sun Dec 08 2024 11:20:01 GMT+0100 (Central European Standard Time)
+
+update 1 value in a row - lampen (20000 records) x 3,679 ops/sec ±0.74% (111 runs sampled)Sun Dec 08 2024 11:20:09 GMT+0100 (Central European Standard Time)update 2 values in a row - lampen (20000 records) x 3,556 ops/sec ±0.96% (109 runs sampled)
+
+Sun Dec 08 2024 11:20:17 GMT+0100 (Central European Standard Time)update 3 values in a row - lampen (20000 records) x 2,931 ops/sec ±1.76% (103 runs sampled)
+
+Sun Dec 08 2024 11:20:25 GMT+0100 (Central European Standard Time)
+
+update 1 column - lampen (20000 records) x 3,315 ops/sec ±1.07% (109 runs sampled)Sun Dec 08 2024 11:20:32 GMT+0100 (Central European Standard Time)
+update 2 column - lampen (20000 records) x 1,698 ops/sec ±1.06% (105 runs sampled)
+
+update 5 column - lampen (20000 records) x 686 ops/sec ±1.00% (105 runs sampled)
+Sun Dec 08 2024 11:20:40 GMT+0100 (Central European Standard Time)Sun Dec 08 2024 11:20:48 GMT+0100 (Central European Standard Time)
+
+update 10 column - lampen (20000 records) x 343 ops/sec ±0.98% (105 runs sampled)
+update 20 column - lampen (20000 records) x 175 ops/sec ±1.04% (107 runs sampled)Sun Dec 08 2024 11:20:55 GMT+0100 (Central European Standard Time)
+Sun Dec 08 2024 11:20:56 GMT+0100 (Central European Standard Time)
+addOne write 1 x 6,063 ops/sec ±2.48% (10 runs sampled)
+Sun Dec 08 2024 11:21:33 GMT+0100 (Central European Standard Time)
+Test deleted? x 1.04 ops/sec ±166.80% (37 runs sampled)
+Sun Dec 08 2024 11:21:33 GMT+0100 (Central European Standard Time)
+
+addOne write 10 x 620 ops/sec ±1.53% (10 runs sampled)
+
+Test deleted? x 0.96 ops/sec ±167.99% (36 runs sampled)Sun Dec 08 2024 11:22:11 GMT+0100 (Central European Standard Time)Sun Dec 08 2024 11:22:12 GMT+0100 (Central European Standard Time)
+
+addOne write 100 x 62.46 ops/sec ±5.24% (10 runs sampled)Sun Dec 08 2024 11:22:51 GMT+0100 (Central European Standard Time)Test deleted? x 0.97 ops/sec ±168.32% (37 runs sampled)
+
+Sun Dec 08 2024 11:22:53 GMT+0100 (Central European Standard Time)
+
+addOne write 1K x 6.15 ops/sec ±1.84% (10 runs sampled)
+Sun Dec 08 2024 11:24:14 GMT+0100 (Central European Standard Time)
+Test deleted? x 0.46 ops/sec ±183.29% (37 runs sampled)Sun Dec 08 2024 11:24:22 GMT+0100 (Central European Standard Time)
+addOne write 5K x 1.34 ops/sec ±3.03% (10 runs sampled)
+Sun Dec 08 2024 11:30:46 GMT+0100 (Central European Standard Time)
+Test deleted? x 0.10 ops/sec ±193.33% (37 runs sampled)
+Sun Dec 08 2024 11:30:47 GMT+0100 (Central European Standard Time)
+addAll write 1 x 153,388 ops/sec ±0.00% (1 run sampled)
+
+
+Sun Dec 08 2024 11:34:33 GMT+0100 (Central European Standard Time)Test deleted? x 0.16 ops/sec ±191.42% (36 runs sampled)
+addAll write 10 x 48,478 ops/sec ±0.00% (1 run sampled)
+Sun Dec 08 2024 11:34:33 GMT+0100 (Central European Standard Time)Sun Dec 08 2024 11:49:07 GMT+0100 (Central European Standard Time)Test deleted? x 0.04 ops/sec ±194.81% (36 runs sampled)
+
+addAll write 100 x 7,007 ops/sec ±0.00% (1 run sampled)
+Sun Dec 08 2024 11:49:08 GMT+0100 (Central European Standard Time)
+
+Test deleted? x 0.05 ops/sec ±194.73% (38 runs sampled)Sun Dec 08 2024 12:02:53 GMT+0100 (Central European Standard Time)
+Sun Dec 08 2024 12:02:53 GMT+0100 (Central European Standard Time)
+addAll write 1000 x 480 ops/sec ±0.00% (1 run sampled)
+Sun Dec 08 2024 12:08:29 GMT+0100 (Central European Standard Time)
+
+Test deleted? x 0.11 ops/sec ±192.88% (37 runs sampled)
+
+Sun Dec 08 2024 12:08:37 GMT+0100 (Central European Standard Time)delete 1 record lampen x 129 ops/sec ±0.21% (108 runs sampled)
+
+Test added x 2.42 ops/sec ±4.77% (17 runs sampled)Sun Dec 08 2024 12:08:44 GMT+0100 (Central European Standard Time)
+delete 10 record lampen x 13.04 ops/sec ±0.19% (87 runs sampled)
+Sun Dec 08 2024 12:08:52 GMT+0100 (Central European Standard Time)
+
+Sun Dec 08 2024 12:09:00 GMT+0100 (Central European Standard Time)Test added x 2.31 ops/sec ±5.09% (16 runs sampled)Sun Dec 08 2024 12:09:28 GMT+0100 (Central European Standard Time)
+
+delete 100 record lampen x 1.30 ops/sec ±0.12% (36 runs sampled)Sun Dec 08 2024 12:09:36 GMT+0100 (Central European Standard Time)Test added x 2.17 ops/sec ±17.66% (16 runs sampled)
+
+Sun Dec 08 2024 12:13:27 GMT+0100 (Central European Standard Time)
+
+delete 1K record lampen x 0.13 ops/sec ±0.11% (30 runs sampled)Sun Dec 08 2024 12:13:39 GMT+0100 (Central European Standard Time)
+Sun Dec 08 2024 12:13:39 GMT+0100 (Central European Standard Time)
+Test added x 1.39 ops/sec ±90.46% (16 runs sampled)
